@@ -1,0 +1,89 @@
+@article{Lee2002,
+abstract = {In this article, we propose a new algorithm using the characteristics of reconstructed phase portraits by delay-coordinate mapping utilizing lag rotundity for a real-time detection of QRS complexes in ECG signals. In reconstructing phase portrait the mapping parameters, time delay, and mapping dimension play important roles in shaping of portraits drawn in a new dimensional space. Experimentally, the optimal mapping time delay for detection of QRS complexes turned out to be 20 ms. To explore the meaning of this time delay and the proper mapping dimension, we applied a fill factor, mutual information, and autocorrelation function algorithm that were generally used to analyze the chaotic characteristics of sampled signals. From these results, we could find the fact that the performance of our proposed algorithms relied mainly on the geometrical property such as an area of the reconstructed phase portrait. For the real application, we applied our algorithm for designing a small cardiac event recorder. This system was to record patients' ECG and R-R intervals for 1 h to investigate HRV characteristics of the patients who had vasovagal syncope symptom and for the evaluation, we implemented our algorithm in C language and applied to MIT/BIH arrhythmia database of 48 subjects. Our proposed algorithm achieved a 99.58{\%} detection rate of QRS complexes.},
+author = {Lee, Jeong Whan and Kim, Kyeong Seop and Lee, Bongsoo and Lee, Byungchae and Lee, Myoung Ho},
+doi = {10.1114/1.1523030},
+isbn = {0090-6964 (Print). 0090-6964 (Linking)},
+issn = {00906964},
+journal = {Annals of Biomedical Engineering},
+keywords = {ECG,HRV,QRS complexes,Reconstructed phase portrait},
+number = {9},
+pages = {1140--1151},
+pmid = {12502225},
+title = {{A real time QRS detection using delay-coordinate mapping for the microcontroller implementation}},
+volume = {30},
+year = {2002}
+}
+
+@article{Pan1985,
+abstract = {We have developed a real-time algorithm for detection of the QRS complexes of ECG signals. It reliably recognizes QRS complexes based upon digital analyses of slope, amplitude, and width. A special digital bandpass filter reduces false detections caused by the various types of interference present in ECG signals. This filtering permits use of low thresholds, thereby increasing detection sensitivity. The algorithm automatically adjusts thresholds and parameters periodically to adapt to such ECG changes as QRS morphology and heart rate. For the standard 24 h MIT/BIH arrhythmia database, this algorithm correctly detects 99.3 percent of the QRS complexes.},
+author = {Pan, Jiapu and Tompkins, Willis J.},
+doi = {10.1109/TBME.1985.325532},
+isbn = {0018-9294 VO  - BME-32},
+issn = {0018-9294},
+journal = {IEEE Transactions on Biomedical Engineering},
+number = {3},
+pages = {230--236},
+pmid = {3997178},
+title = {{A Real-Time QRS Detection Algorithm}},
+url = {http://ieeexplore.ieee.org/document/4122029/},
+volume = {BME-32},
+year = {1985}
+}
+
+@article{Afonso1999,
+abstract = {We have designed a multirate digital signal processing algorithm to detect heart beats in the electrocardiogram (ECG). The algorithm incorporates a filter bank (FB) which decomposes the ECG into subbands with uniform frequency bandwidths. The FB-based algorithm enables independent time and frequency analysis to be performed on a signal. Features computed from a set of the subbands and a heuristic detection strategy are used to fuse decisions from multiple one-channel beat detection algorithms. The overall beat detection algorithm has a sensitivity of 99.59{\%} and a positive predictivity of 99.56{\%} against the MIT/BIH database. Furthermore this is a real-time algorithm since its beat detection latency is minimal. The FB-based beat detection algorithm also inherently lends itself to a computationally efficient structure since the detection logic operates at the subband rate. The FB-based structure is potentially useful for performing multiple ECG processing tasks using one set of preprocessing filters.},
+author = {Afonso, V X and Tompkins, W J and Nguyen, T Q and Luo, S},
+doi = {10.1109/10.740882},
+isbn = {0018-9294},
+issn = {0018-9294},
+journal = {IEEE Transactions on Biomedical Engineering},
+keywords = {Algorithms,Computer-Assisted,Computer-Assisted: instrumentation,Databases,Electrocardiography,Electrocardiography: instrumentation,Electrocardiography: methods,Electrocardiography: statistics {\&} numerical data,Equipment Design,Factual,Heart Rate,Humans,Sensitivity and Specificity,Signal Processing,Time Factors},
+number = {2},
+pages = {192--202},
+pmid = {9932341},
+title = {{ECG beat detection using filter banks}},
+url = {http://www.ncbi.nlm.nih.gov/pubmed/9932341},
+volume = {46},
+year = {1999}
+}
+
+@article{Scholkmann2012,
+abstract = {We present a new method for automatic detection of peaks in noisy periodic and quasi-periodic signals. The new method, called automatic multiscale-based peak detection (AMPD), is based on the calculation and analysis of the local maxima scalogram, a matrix comprising the scale-dependent occurrences of local maxima. The usefulness of the proposed method is shown by applying the AMPD algorithm to simulated and real-world signals.},
+author = {Scholkmann, Felix and Boss, Jens and Wolf, Martin},
+doi = {10.3390/a5040588},
+issn = {19994893},
+journal = {Algorithms},
+keywords = {Automatic multiscale-based peak detection (AMPD) algorithm,Local maxima scalogram,Multiscale local maxima detection,Peak detection},
+number = {4},
+pages = {588--603},
+title = {{An efficient algorithm for automatic peak detection in noisy periodic and quasi-periodic signals}},
+volume = {5},
+year = {2012}
+}
+
+@article{sedghamiz2014complete,
+  title={Complete Pan-Tompkins Implementation ECG QRS Detector},
+  author={Sedghamiz, H},
+  journal={Matlab Central: Community Profile. Available online at: http://www. mathworks. com/matlabcentral/profile/authors/2510422-hooman-sedghamiz},
+  year={2014}
+}
+
+@article{sedghamiz2013online,
+  title={An online algorithm for r, s and t wave detection},
+  author={Sedghamiz, Hooman},
+  journal={Matlab Central: Community Profile. Available online at: https://www.mathworks.com/matlabcentral/fileexchange/45404-ecg-q-r-s-wave-online-detector?s_tid=prof_contriblnk},
+  year={2013}
+}
+
+@INPROCEEDINGS{7391510, 
+author={H. Sedghamiz and D. Santonocito}, 
+booktitle={2015 E-Health and Bioengineering Conference (EHB)}, 
+title={Unsupervised detection and classification of motor unit action potentials in intramuscular electromyography signals}, 
+year={2015}, 
+volume={}, 
+number={}, 
+pages={1-6}, 
+keywords={electromyography;medical signal detection;pattern clustering;principal component analysis;signal classification;unsupervised learning;MTEO based analysis method;MUAP detection;PCA;computational speed;correlation computation load;diseased muscles;fiducial point detection;healthy muscles;intramuscular EMG recordings;intramuscular electromyography signals;label matching techniques;motor unit action potential classification;motor unit action potential clustering;motor unit action potential detection;multiresolution Teager energy operator;posterior cricoarytenoid anterior;principal component analysis;single-channel intramuscular electromyography;template matching techniques;tibiliasis anterior;unsupervised clustering;unsupervised detection;Algorithm design and analysis;Band-pass filters;Clustering algorithms;Electric potential;Electromyography;Noise measurement;Principal component analysis;decomposition;electromyography;template matching;unsupervised classification}, 
+doi={10.1109/EHB.2015.7391510}, 
+ISSN={}, 
+month={Nov},}
