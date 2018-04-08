@@ -37,7 +37,7 @@ BioSigKit provides a set of subroutines implementing the six following QRS detec
 
 BioSigKit might be used either directly  from the command-line by directly calling its constructor (e.g. ```BioSigKit = BioSigKit(InputSignal,SamplingFrequency)```) or by initiating its GUI.
 
-![Comparison of default Matlab plotting and gramm plotting with corresponding code. A. Grouped data Matlab plot generated using minimal code. Note the absence of confidence interval representations, the placement and aspect of the color legend, the non-matching axes limits, as well as the improper fit of content to the figure window width (the black outline represents the figure window edges). B. Gramm plot and corresponding code. C. Gramm plot with alternative design resulting from swapping the arguments highlighted with red and blue boxes in panel B](fig1.png).
+![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](fig1.png).
 
 
 # References
