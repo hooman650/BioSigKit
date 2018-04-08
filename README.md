@@ -34,7 +34,8 @@ To see the list of all the subroutines and children accessible simply call ```an
 ## GUI : 
 To instantiate the GUI, simply run the ```RunBioSigKit()```.
 
-# Examples :
+## Examples :
 See the ```Demo.m``` for a few examples on how to use BioKitSig.
+
 
 
