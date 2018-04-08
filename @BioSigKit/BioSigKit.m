@@ -211,7 +211,7 @@ classdef BioSigKit < handle
           end
           try
             R = AMPD_P(obj.Sig,obj.ScalogramL,obj.PlotResult); 
-            obj.Results.R = R;
+            obj.Results.R(1,:) = R(:,1);
           catch ME
              msgbox(ME.message); 
           end
