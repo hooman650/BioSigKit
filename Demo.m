@@ -17,7 +17,8 @@
 % Email : Hooman.sedghamiz@gmail.com
 %--------------- Only Hit the Run button -----------------%
 %---------------- Load a Sample ECG Signal from (\SampleSignals) directory -----------------%
-load([fileparts(which(mfilename)),'\SampleSignals\ECG1.mat']);
+addpath(genpath(fileparts(which(mfilename))));
+load('ECG1.mat');
 % ------------------ Call the BioSigKit Wrapper -------------------%
 Analysis = RunBioSigKit(EKG1,250,0);          % Uses ECG1 as input,Fs=250
 %-------------------- Call Pan Tompkins Algorithm ------------------- %
