@@ -37,7 +37,7 @@ BioSigKit provides a set of subroutines implementing the six following QRS detec
 
 BioSigKit might be used either directly  from the command-line by directly calling its constructor (e.g. ```BioSigKit = BioSigKit(InputSignal,SamplingFrequency)```) or by initiating its GUI.
 
-![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](fig1.png).
+![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](fig1.png)
 
 
 # References
