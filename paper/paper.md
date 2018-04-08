@@ -23,17 +23,23 @@ BioSigKit is a set of Matlab (The MathWorks Inc., Natick, USA) tools for analysi
 # BioSigKit Algorithms and Use
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
 
-1. Pan and Tompkins [@Pan1985;@sedghamiz2014complete]: This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
+## 1. Pan and Tompkins [@Pan1985;@sedghamiz2014complete]: 
+This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
 
-2. Nonlinear Phase Space Reconstruction [@Lee2002]: This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```). 
+## 2. Nonlinear Phase Space Reconstruction [@Lee2002]: 
+This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```). 
 
-3. State-Machine [@sedghamiz2013online]: This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
+## 3. State-Machine [@sedghamiz2013online]: 
+This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
 
-4. Filter Bank [@Afonso1999]: The filter bank method combines several band-pass filters in order to better delineate the QRS complexes. This algorithm is very similar to wavelet based QRS detectors (subroutine name : ```BioSigKit.FilterBankQRS()```).
+## 4. Filter Bank [@Afonso1999]: 
+The filter bank method combines several band-pass filters in order to better delineate the QRS complexes. This algorithm is very similar to wavelet based QRS detectors (subroutine name : ```BioSigKit.FilterBankQRS()```).
 
-5. QRS Multilevel Teager Energy Operator (MTEO) [@7391510]: This algorithm employs Multilevel Teager Energy Operator (MTEO) in order to locate the QRS complexes. MTEO has been successfully used in Electromyography signals for action potential detection [@7391510] since it is computationally much more efficient than wavelet transform (subroutine name : ```BioSigKit.MTEO_qrstAlg()```). 
+## 5. QRS Multilevel Teager Energy Operator (MTEO) [@7391510]: 
+This algorithm employs Multilevel Teager Energy Operator (MTEO) in order to locate the QRS complexes. MTEO has been successfully used in Electromyography signals for action potential detection [@7391510] since it is computationally much more efficient than wavelet transform (subroutine name : ```BioSigKit.MTEO_qrstAlg()```). 
 
-6. Automatic Multiscale-based Peak Detection [@Scholkmann2012]: This method is a more general peak detection. However, according to the study by Scholkmann et al. [@Scholkmann2012], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
+## 6. Automatic Multiscale-based Peak Detection [@Scholkmann2012]: 
+This method is a more general peak detection. However, according to the study by Scholkmann et al. [@Scholkmann2012], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
 
 BioSigKit might be used either directly  from the command-line by calling its constructor (e.g. ```BioSigKit = BioSigKit(InputSignal,SamplingFrequency)```) or by initiating its GUI.
 
