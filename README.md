@@ -37,5 +37,8 @@ To instantiate the GUI, simply run the ```RunBioSigKit()```.
 ## Examples :
 See the ```Demo.m``` for a few examples on how to use BioKitSig.
 
+## GUI Functionalities
+![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](paper/fig1.png)
+
 
 
