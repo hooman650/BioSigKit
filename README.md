@@ -18,14 +18,21 @@ Automatic Multiscale-based Peak Detection [@Scholkmann2012]: This method is a mo
 
 # Getting Started
 BioSigKit might be used either from the command line or its Graphical User Interface (GUI).
-1. Command Line : To use the command line simply call the constructor as follows:
+1. Command Line : 
+
+To use the command line simply call the constructor as follows:
 ```analysis = BioSigKit(InputSig, SampleFreq, 0);```
+
 To access subroutines simply use the point operator as :
 ```analysis.PanTompkins();```
+
 The results are stored in the result struct, you can access it as :
 ```analysis.Results;```
+
 To see the list of all the subroutines and children accessible simply call ```analysis``` in Matlab command-line.
-2. GUI : To instantiate the GUI, simply run the ```RunBioSigKit()```.
+
+2. GUI : 
+To instantiate the GUI, simply run the ```RunBioSigKit()```.
 
 # Examples :
 See the ```Demo.m``` for a few examples on how to use BioKitSig.
