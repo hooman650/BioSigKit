@@ -4,17 +4,17 @@ BioSigKit is a set of useful signal processing tools in Matlab that are either d
 # QRS Detection Algorithms offered by BioSigKit
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
 
-Pan and Tompkins [[J. Pan](http://www.robots.ox.ac.uk/~gari/teaching/cdt/A3/readings/ECG/Pan+Tompkins.pdf);[H. Sedghamiz, 2014](https://www.mathworks.com/matlabcentral/fileexchange/45840-complete-pan-tompkins-implementation-ecg-qrs-detector)]: This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
+Pan and Tompkins [[J. Pan, 1985](http://www.robots.ox.ac.uk/~gari/teaching/cdt/A3/readings/ECG/Pan+Tompkins.pdf);[H. Sedghamiz, 2014](https://www.researchgate.net/publication/313673153_Matlab_Implementation_of_Pan_Tompkins_ECG_QRS_detector)]: This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
 
-Nonlinear Phase Space Reconstruction [@Lee2002]: This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```).
+Nonlinear Phase Space Reconstruction [[J. Lee, 2002](https://link.springer.com/article/10.1114/1.1523030)]: This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```).
 
-State-Machine [@sedghamiz2013online]: This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
+State-Machine [H. Sedghamiz, 2013](https://www.researchgate.net/publication/316960619_Matlab_Implementation_of_a_simple_real_time_Q_R_S_and_T_wave_detector): This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
 
-Filter Bank [@Afonso1999]: The filter bank method combines several band-pass filters in order to better delineate the QRS complexes. This algorithm is very similar to wavelet based QRS detectors (subroutine name : ```BioSigKit.FilterBankQRS()```).
+Filter Bank [[V. Afonso, 1999](http://ieeexplore.ieee.org/document/740882/)]: The filter bank method combines several band-pass filters in order to better delineate the QRS complexes. This algorithm is very similar to wavelet based QRS detectors (subroutine name : ```BioSigKit.FilterBankQRS()```).
 
-QRS Multilevel Teager Energy Operator (MTEO) [@7391510]: This algorithm employs Multilevel Teager Energy Operator (MTEO) in order to locate the QRS complexes. MTEO has been successfully used in Electromyography signals for action potential detection [@7391510] since it is computationally much more efficient than wavelet transform (subroutine name : ```BioSigKit.MTEO_qrstAlg()```).
+QRS Multilevel Teager Energy Operator (MTEO) [[H. Sedghamiz, 2016](http://ieeexplore.ieee.org/document/7391510/)]: This algorithm employs Multilevel Teager Energy Operator (MTEO) in order to locate the QRS complexes. MTEO has been successfully used in Electromyography signals for action potential detection [[H. Sedghamiz, 2016](http://ieeexplore.ieee.org/document/7391510/)] since it is computationally much more efficient than wavelet transform (subroutine name : ```BioSigKit.MTEO_qrstAlg()```).
 
-Automatic Multiscale-based Peak Detection [@Scholkmann2012]: This method is a more general peak detection. However, according to the study by Scholkmann et al. [@Scholkmann2012], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
+Automatic Multiscale-based Peak Detection [[Scholkmann2012](http://www.mdpi.com/1999-4893/5/4/588)]: This method is a more general peak detection. However, according to the study by Scholkmann et al. [[Scholkmann, 2012](http://www.mdpi.com/1999-4893/5/4/588)], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
 
 # Getting Started
 BioSigKit might be used either from the command line or its Graphical User Interface (GUI).
