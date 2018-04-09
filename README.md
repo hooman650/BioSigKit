@@ -21,7 +21,7 @@ BioSigKit might be used either from the command line or its Graphical User Inter
 ## Command Line : 
 
 To use the command line simply call the constructor as follows:
-```analysis = BioSigKit(InputSig, SampleFreq, 0);```
+```analysis = RunBioSigKit(InputSig, SampleFreq, 0);```
 
 To access subroutines simply use the point operator as :
 ```analysis.PanTompkins();```
