@@ -4,7 +4,7 @@ BioSigKit is a set of useful signal processing tools in Matlab that are either d
 # QRS Detection Algorithms offered by BioSigKit
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
 
-Pan and Tompkins [@Pan1985;@sedghamiz2014complete]: This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
+Pan and Tompkins [[J. Pan](http://www.robots.ox.ac.uk/~gari/teaching/cdt/A3/readings/ECG/Pan+Tompkins.pdf);[H. Sedghamiz, 2014](https://www.mathworks.com/matlabcentral/fileexchange/45840-complete-pan-tompkins-implementation-ecg-qrs-detector)]: This algorithm is probably one of the most widely used algorithms for QRS detection in the research community. It combines a set of preprocessing methods in order to enhance the detection rate and reduce the false detection of T-waves in the ECG recordings (subroutine name : ```BioSigKit.PanTompkins()```).
 
 Nonlinear Phase Space Reconstruction [@Lee2002]: This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```).
 
