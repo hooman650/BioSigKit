@@ -8,7 +8,7 @@ Pan and Tompkins [[J. Pan, 1985](http://www.robots.ox.ac.uk/~gari/teaching/cdt/A
 
 Nonlinear Phase Space Reconstruction [[J. Lee, 2002](https://link.springer.com/article/10.1114/1.1523030)]: This method employs the area under the non-linear phase space reconstruction of the ECG recording in order to identify the QRS complexes (subroutine name : ```BioSigKit.PhaseSpaceAlg()```).
 
-State-Machine [H. Sedghamiz, 2013](https://www.researchgate.net/publication/316960619_Matlab_Implementation_of_a_simple_real_time_Q_R_S_and_T_wave_detector): This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
+State-Machine [[H. Sedghamiz, 2013](https://www.researchgate.net/publication/316960619_Matlab_Implementation_of_a_simple_real_time_Q_R_S_and_T_wave_detector)]: This algorithm employs state-machine in order to identify R, S and T waves in an ECG recording (subroutine name : ```BioSigKit.StateMachine()```).
 
 Filter Bank [[V. Afonso, 1999](http://ieeexplore.ieee.org/document/740882/)]: The filter bank method combines several band-pass filters in order to better delineate the QRS complexes. This algorithm is very similar to wavelet based QRS detectors (subroutine name : ```BioSigKit.FilterBankQRS()```).
 
