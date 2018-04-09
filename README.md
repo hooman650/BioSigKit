@@ -40,5 +40,12 @@ See the ```Demo.m``` for a few examples on how to use BioKitSig.
 ## GUI Functionalities
 ![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](paper/fig1.png)
 
+# Acknowledgements:
+BioSigKit currently uses the following libraries and I would like to appreciate their efforts:
+### 1) [GUI Layout Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/47982-gui-layout-toolbox).
+### 2) [Rupert Ortner, 2016. Matlab implementation of Filter-Bank](https://searchcode.com/codesearch/view/13912596/).
+### 3) [Distinguishable Colors](https://www.mathworks.com/matlabcentral/fileexchange/29702-generate-maximally-perceptually-distinct-colors).
+### 4) [Alexandros Leontitsis. Phase-Space Computation]( http://www.geocities.com/CapeCanaveral/Lab/1421).
+
 
 
