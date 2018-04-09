@@ -20,6 +20,8 @@ bibliography: paper.bib
 # Summary
 BioSigKit is a set of Matlab (The MathWorks Inc., Natick, USA) tools for analysis and visualization of bio-signals, specifically Electrocardiogram (ECG) recordings. Matlab is a widely used programming language among researchers thanks to its simple and flexible syntax. Biomedical signal processing is one of the main areas that has been benefiting from Matlab for research and rapid prototyping. One of the most widely used and studied bio-signals is ECG. ECG is a signal reflecting the rotation of the electrical heart axis in respect to the electrode position in space. Therefore, ECG provides an invaluable insight into the cardiovascular and heart functionality. The beats in an ECG recording are identified with the help of an automated QRS detection algorithm and their morphology is studied in order to better understand the underlying cardiovascular function. Many of the most popular QRS detection algorithms [@Lee2002;@Afonso1999;@Pan1985;@Scholkmann2012] are only implemented in C or other similar higher level programming languages. BioSigKit provides a set of Matlab methods that implement 6 popular ECG QRS detectors. The object oriented implementation of BioSigKit makes it easy to update and add new algorithms to its collection. The ultimate goal of BioSigKit is to provide an easy to use interactive Matlab software that provides easy access to many standard bio-signal processing algorithms. BioSigKit currenlty provides six QRS detection algorithms detailed in the next section.
 
+![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](fig1.png)
+
 # BioSigKit Algorithms and Use
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
 
@@ -42,8 +44,6 @@ This algorithm employs Multilevel Teager Energy Operator (MTEO) in order to loca
 This method is a more general peak detection. However, according to the study by Scholkmann et al. [@Scholkmann2012], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
 
 BioSigKit might be used either directly  from the command-line by calling its constructor (e.g. ```BioSigKit = BioSigKit(InputSignal,SamplingFrequency)```) or by initiating its GUI.
-
-![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](fig1.png)
 
 
 # References
