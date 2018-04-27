@@ -57,5 +57,27 @@ BioSigKit currently uses the following libraries and I would like to appreciate 
 ### 4) [Alexandros Leontitsis. Phase-Space Computation]( http://www.geocities.com/CapeCanaveral/Lab/1421).
 
 # Inclusion of New Methods
-Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days.
+Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days. If you would like to personally contribute your algorithm or work to the subroutines please use the following codemap to get an idea about the structure of BioSigKit and how you could contribute directly;
 
+## Codemap
+```
+|--- RunBioSigKit.m                     <-------- Main module, GUI and Commandline
+|--- @BioSigKit                         <-------- Main module BioSigKit class
+    |--- BioSigKit.m                    <-------- BioSigKit object, instantiates all subroutines
+    |--- BioSigKitPanel.m               <-------- Creates the Visualization panel and its controls
+|--- Algorithms                         <-------- List of all subroutines offered by BioSigKit
+    |--- AMPD_P.m                       <-------- Multi-scale Peak detector algorithm
+    |--- MTEO_qrst.m                    <-------- Multilevel Teager Energy Operator
+    |--- PhaseSpaceQRS.m                <-------- Phase Space based QRS detector
+    |--- SimpleRST.m                    <-------- State machine for R, S and T peak detection
+    |--- distingusihable_colors.m       <-------- Computes distinguishabe colors for visualization
+    |--- nqrsdetect.m                   <-------- Filter Bank ECG detector
+    |--- pan_tompkin.m                  <-------- Pan Tompkins implementation
+    |--- phasespace.m                   <-------- Computes phase space of a signal
+|--- layout                             <-------- Dependencies for GUI (third party)
+|--- SampleSignals
+    |--- ECG1                           <-------- test case 1 for evaluation of the algorithms
+    |--- ECG5                           <-------- test case 2 for evaluation of the algorithms 
+|--- paper                              <-------- Details the toolbox 
+
+```
