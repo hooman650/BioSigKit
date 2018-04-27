@@ -38,7 +38,9 @@ To access subroutines simply use the point operator as :
 The results are stored in the result struct, you can access it as :
 ```analysis.Results;```
 
-To see the list of all the subroutines and children accessible simply call ```analysis``` in Matlab command-line.
+Depending on the processing algorithm employed, the result struct would contain 'P', 'Q', 'R', 'S' and 'T' wave indices. 
+
+To see the list of all the subroutines and children accessible simply call ```analysis``` in Matlab command-line. 
 
 ## GUI : 
 To instantiate the GUI, simply run the ```RunBioSigKit()```.
