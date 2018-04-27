@@ -49,6 +49,9 @@ See the ```Demo.m``` for a few examples on how to use BioKitSig.
 ## GUI Functionalities
 ![Graphical User Interface of BioSigKit. The algorithm pop-up menu provides an easy way for the selection of the QRS detection algorithm. The statistics panel automatically computes mean, maximum and minimum detected intervals.](paper/fig1.png)
 
+# Test Cases
+BioSigKit comes with two sample ECG recordings for testing of the algorithms offered. See SampleSignals ECG1 and ECG2 for these test cases. Please use the GUI and simply choose the algorthim that you would like to evaluate to see the results. Furthermore, see the publications for each subroutine to get a better overview what the accuracy of the proposed method might be.
+
 # Acknowledgements:
 BioSigKit currently uses the following libraries and I would like to appreciate their efforts:
 ### 1) [GUI Layout Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/47982-gui-layout-toolbox).
