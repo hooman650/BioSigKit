@@ -18,8 +18,9 @@ QRS Multilevel Teager Energy Operator (MTEO) [[H. Sedghamiz, 2016](http://ieeexp
 
 Automatic Multiscale-based Peak Detection [[Scholkmann2012](http://www.mdpi.com/1999-4893/5/4/588)]: This method is a more general peak detection. However, according to the study by Scholkmann et al. [[Scholkmann, 2012](http://www.mdpi.com/1999-4893/5/4/588)], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
 
-# Getting Started
-BioSigKit might be used either from the command line or its Graphical User Interface (GUI).
+# Getting Started and Installation
+To install BioSigKit simply download the repository.
+BioSigKit might be used either from the command line or its Graphical User Interface (GUI). 
 ## Command Line : 
 
 To use the command line simply call the constructor as follows:
