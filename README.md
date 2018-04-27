@@ -75,7 +75,7 @@ Have you published an algorithm that you would like it to be featured in BioSigK
     |--- pan_tompkin.m                  <-------- Pan Tompkins implementation
     |--- phasespace.m                   <-------- Computes phase space of a signal
 |--- layout                             <-------- Dependencies for GUI (third party)
-|--- SampleSignals
+|--- SampleSignals                      <-------- Test Cases
     |--- ECG1                           <-------- test case 1 for evaluation of the algorithms
     |--- ECG5                           <-------- test case 2 for evaluation of the algorithms 
 |--- paper                              <-------- Details the toolbox 
