@@ -24,7 +24,7 @@ To install BioSigKit simply:
 
 2. Unzip the downloaded package and simply run "RunBioSigKit.m".
 
-3. See the instrcutions bellow for further details: 
+3. See the instructions bellow for further details: 
 
 BioSigKit might be used either from the command line or its Graphical User Interface (GUI). 
 ## Command Line : 
