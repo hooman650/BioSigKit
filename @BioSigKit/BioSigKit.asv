@@ -529,7 +529,7 @@ classdef BioSigKit < handle
               temp_ecg = obj.Sig;
               obj.Sig = R';
               PC = neural_pca(obj,size(R,2),2);
-              obj.Sig = temp_ecg;
+              obj.Sig = temp
               PC = PC(:,1);
            % ------------------- Build EDR Signal --------------------- %
               xx = 1 : length(temp_ecg);
@@ -554,10 +554,10 @@ classdef BioSigKit < handle
             % ------------------- Real Time PCA ------------------------ %
             PC = neural_pca(obj,3,2);
             PC = PC(:,1);
-            ADR = output'*PC;
+            ADR = (output)*PC;
             ADR = detrend(ADR);
        end
-       %% =================== Teager-Keiser Energy Op =========== %%
+       %% ======================== Teager-Keiser Energy Op =========== %%
        function [ey,ex] = TK_comp(obj)
            % --------------- Outputs ----------------%
            % ey: energy operator
