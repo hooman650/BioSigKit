@@ -18,6 +18,17 @@ QRS Multilevel Teager Energy Operator (MTEO) [[H. Sedghamiz, 2016](http://ieeexp
 
 Automatic Multiscale-based Peak Detection [[Scholkmann2012](http://www.mdpi.com/1999-4893/5/4/588)]: This method is a more general peak detection. However, according to the study by Scholkmann et al. [[Scholkmann, 2012](http://www.mdpi.com/1999-4893/5/4/588)], it showed a high performance for the beat detection as well. Therefore, it is implemented as one of the subroutines in BioSigKit (subroutine name : ```BioSigKit.AMPD_PAlg()```).
 
+# Subroutines offered for analysis of ACC, EMG, EEG and Foetal-ECG
+Activity detection with hilbert transform in EMG and audio signals (```obj.Env_hilbert()```). For more details regarding this algorithm see [[Alarm detection](https://blogs.mathworks.com/pick/2014/05/23/automatic-activity-detection-using-hilbert-transform/)].
+
+Mobility and complexity computation with Hjorth parameters in EEG signals (```obj.ComputeHjorthP```). For more details regarding this subroutine refer to [[Hjorth Parameters](https://en.wikipedia.org/wiki/Hjorth_parameters)].
+
+Posture detection and adaptive filtering in 3 Channel Accelerometer signals  (```obj.ACC_Act```). This subroutine is able to compute the Energy Expenditure (EE) and Signal Magnitude Area (SMA) from 3 channel ACC recordings. Based on EE and SMA, the subroutine is able to estimate the activity level of the subject (e.g. steady, active, highly active). Accelerometers are used in many studies and being able to estimate the state of the subject by analyzing the ACC signals is helpfull in many tasks.
+
+Accurate template matching for locating MUAPs in EMG recordings based on Psuedo-Correlation (```obj.TemplateMatch```). Psuedocorrelation has shown to be more accurate than Pearson correlation. For more details see [[H. Sedghamiz, 2016](http://ieeexplore.ieee.org/document/7391510/)].
+
+Computation of ECG derived respiration based on real time neural PCA computation ([[Neural PCA](https://www.researchgate.net/publication/4116857_Real-time_PCA_principal_component_analysis_implementation_on_DSP)]). This subroutine first applies pan-tompkins algorithm to locate the R peaks and then reconstructs the EDR signal by computing the PCs of the QRS complexes in real-time (```obj.EDR_comp```). 
+
 # Getting Started and Installation
 To install BioSigKit simply:
 1. Download the repository.
