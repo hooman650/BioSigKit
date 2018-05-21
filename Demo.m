@@ -22,6 +22,8 @@
 slashchar = char('/'*isunix + '\'*(~isunix)); 
 load([fileparts(which(mfilename)),slashchar,'SampleSignals',slashchar,...
     'ECG1.mat']);
+addpath(genpath(fileparts(which(mfilename))));
+load('ECG1.mat');
 % ------------------ Call the BioSigKit Wrapper -------------------%
 Analysis = RunBioSigKit(EKG1,250,0);          % Uses ECG1 as input,Fs=250
 %-------------------- Call Pan Tompkins Algorithm ------------------- %
@@ -39,6 +41,7 @@ Analysis.Fs =360;
 
 %--------------------------- Open GUI -----------------------------%
 % Analysis = RunBioSigKit();                    % Opens GUI 
+
 
 %% ==================  DEMO FOR OTHER SUBROUTINES =================== %%
 % ----------------- Activity detection with hilber Transform -------------%
@@ -99,7 +102,7 @@ title('Foetal ECG extracted...');
 % ----------------- ACC derived respiration ----------------------% 
 load([fileparts(which(mfilename)),slashchar,'SampleSignals',slashchar,...
     'ACC.mat']);
-Analysis.Sig = ACC;
+Analysis.Sig = ACC';
 Analysis.Fs = 200;
 EDR = Analysis.ADR_comp;
 figure,plot(Analysis.Sig/max(Analysis.Sig));
@@ -110,3 +113,4 @@ title('ECG Derived Resp Signal');
 [output,state,EE,F,SMA] = Analysis.ACC_Act;
 States ={'Steady','Slight Movement','High Activity'};
 fprintf(['State is ',States{state+1},' and Energy Expenditure = ',mat2str(EE),'\n']);
+

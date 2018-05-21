@@ -36,7 +36,7 @@ Wn=F*2/Fs;
 N = 3; 
 [a,b] = butter(N,Wn); 
 if max(m,n) >= 60*Fs
-   Y = zeros(m,1:60*Fs);
+   Y = zeros(m,60*Fs);
 else
    Y = zeros(m,length(X(1,:)));
 end
