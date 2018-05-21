@@ -29,6 +29,10 @@ Accurate template matching for locating MUAPs in EMG recordings based on Psuedo-
 
 Computation of ECG derived respiration based on real time neural PCA computation ([[Neural PCA](https://www.researchgate.net/publication/4116857_Real-time_PCA_principal_component_analysis_implementation_on_DSP)]). This subroutine first applies pan-tompkins algorithm to locate the R peaks and then reconstructs the EDR signal by computing the PCs of the QRS complexes in real-time (```obj.EDR_comp```). 
 
+Foetal-ECG extraction from multichannel and single channel maternal ecg recordings. BioSigKit implements a non-linear phase space filter that is able to extract foetal ecg recordings. This is based on delayed phase space reconstruction of the signal. For more details see [[Schreiber, 1996](https://www.ncbi.nlm.nih.gov/pubmed/12780239)]. Futhermore, it is possible to extract the foetal ecg in real-time with the neural PCA offered in BioSigKit. See demo.m file for more details (```obj.nonlinear_phase_filt```).
+
+ECG artifact removal with Recursive Least Squares filter (RLS). BioSigKit also offers a subroutine to remove artefacts from ECG recordings by using a 3 channel Accelerometer recording with RLS filter (```obj.adaptive_filter```). BioSigKit also implements Adaptive Line Enhancer and its leaky version.
+
 # Getting Started and Installation
 To install BioSigKit simply:
 1. Download the repository.
