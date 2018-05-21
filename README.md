@@ -29,13 +29,20 @@ Accurate template matching for locating MUAPs in EMG recordings based on Psuedo-
 
 Computation of ECG derived respiration based on real time neural PCA computation ([[Neural PCA](https://www.researchgate.net/publication/4116857_Real-time_PCA_principal_component_analysis_implementation_on_DSP)]). This subroutine first applies pan-tompkins algorithm to locate the R peaks and then reconstructs the EDR signal by computing the PCs of the QRS complexes in real-time (```obj.EDR_comp```). 
 
+Foetal-ECG extraction from multichannel and single channel maternal ecg recordings. BioSigKit implements a non-linear phase space filter that is able to extract foetal ecg recordings. This is based on delayed phase space reconstruction of the signal. For more details see [[Schreiber, 1996](https://www.ncbi.nlm.nih.gov/pubmed/12780239)]. Futhermore, it is possible to extract the foetal ecg in real-time with the neural PCA offered in BioSigKit. See demo.m file for more details (```obj.nonlinear_phase_filt```).
+
+ECG artifact removal with Recursive Least Squares filter (RLS). BioSigKit also offers a subroutine to remove artefacts from ECG recordings by using a 3 channel Accelerometer recording with RLS filter (```obj.adaptive_filter```). BioSigKit also implements Adaptive Line Enhancer and its leaky version. For more details regarding motion artefact removal in ECG with ACC see [[Shing-Hong Liu, 2009](http://www.jmbe.org.tw/files/404/public/404-2265-1-PB.pdf)]
+
 # Getting Started and Installation
 To install BioSigKit simply:
+
 1. Download the repository.
 
 2. Unzip the downloaded package and simply run "RunBioSigKit.m".
 
 3. See the instructions bellow for further details: 
+
+For help, type ```help BioSigKit```.
 
 BioSigKit might be used either from the command line or its Graphical User Interface (GUI). 
 ## Command Line : 
@@ -78,6 +85,7 @@ Have you published an algorithm that you would like it to be featured in BioSigK
 ## Codemap
 ```
 |--- RunBioSigKit.m                     <-------- Main module, GUI and Commandline
+|--- CheatSheet.pdf                     <-------- Detailed helper file and subroutines of BioSigKit
 |--- @BioSigKit                         <-------- Main module BioSigKit class
     |--- BioSigKit.m                    <-------- BioSigKit object, instantiates all subroutines
     |--- BioSigKitPanel.m               <-------- Creates the Visualization panel and its controls
@@ -90,10 +98,22 @@ Have you published an algorithm that you would like it to be featured in BioSigK
     |--- nqrsdetect.m                   <-------- Filter Bank ECG detector
     |--- pan_tompkin.m                  <-------- Pan Tompkins implementation
     |--- phasespace.m                   <-------- Computes phase space of a signal
+    |--- ACC_Activity.m                 <-------- Posture estimation in ACC recordings
+    |--- ALE_imp.m                      <-------- Delayed adaptive line enhancer
+    |--- envelop_hilbert.m              <-------- Alarm detection with hilbert transform (EMG, Audio, ECG)
+    |--- energyop.m                     <-------- Teager energy operator 
+    |--- NLMS_ecg.m                     <-------- ECG artefact removal with ACC recordings
+    |--- projective.m                   <-------- Nonlinear delayed phase-space filtering
+    |--- PsC.m                          <-------- Psuedo-correlation for template matching
+    |--- RLS.m                          <-------- Recursive Least Squares filter
+    |--- RTpca.m                        <-------- Real-time neural PCA
+    |--- VLALE_imp.m                    <-------- variable leaky ALE filter
 |--- layout                             <-------- Dependencies for GUI (third party)
 |--- SampleSignals                      <-------- Test Cases
     |--- ECG1                           <-------- test case 1 for evaluation of the algorithms
     |--- ECG5                           <-------- test case 2 for evaluation of the algorithms 
+    |--- Foetal_ecg                     <-------- 8 channel maternal ECG recordings
+    |--- ACC                            <-------- 3 channel Accelerometer recordings
 |--- paper                              <-------- Details the toolbox 
 
 ```
