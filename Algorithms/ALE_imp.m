@@ -9,7 +9,6 @@ function [output,e] = ALE_imp(imp,fs,delay,mu,niter)
 %% Outputs :
 % output : output signal
 % e : error signal
-
 %% Author :
 % Hooman Sedghamiz
 % July 2015
