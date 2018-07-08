@@ -12,7 +12,6 @@ function [output,e] = ALE_imp(imp,fs,delay,mu,niter)
 
 %% Author :
 % Hooman Sedghamiz
-% hooman.sedghamiz@medel.com
 % July 2015
 %% Update :
 % Hooman Sedghamiz
