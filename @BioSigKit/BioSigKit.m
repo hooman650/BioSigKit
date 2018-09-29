@@ -345,7 +345,7 @@ classdef BioSigKit < handle
          if ~isempty(obj.Results)
              PP = fields(obj.Results);
              Index = [5,10,15;3,8,13;2,7,12;1,6,11;4,9,14];
-             colors = distinguishable_colors(length(PP));
+             colors = distinguishable_colors(length(PP),{'k','y'});
              for i= 1: length(PP)
                  % ----------- Update Signal ------------------ %
                  line(repmat(obj.Results.(PP{i})(1,:),[2 1]),...
