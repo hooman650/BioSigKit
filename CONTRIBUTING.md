@@ -10,15 +10,15 @@
 ## Project Installation
 Refer to the [README](README.md).
 
-## Contributing to GUI
-The GUI relies on external libraries. The GUI has only been tested on Windows operating systems (10, 8 and 7)
-Please do include any third party library and make sure that you have appropriate licensing to use third party materials.
-
 
 ## Code Style
 
+### Contributing to GUI
+The GUI relies on external libraries. The GUI has only been tested on Windows operating systems (10, 8 and 7)
+Please do include any third party library and make sure that you have appropriate licensing to use third party materials.
+
 ### Adding new algorithms
-Please only add the new algorithms under the Algorithm directory of the reposirty and update the code map. Please add clear helper headers at the begining of your function for clear instructions.
+Please only add the new algorithms under the Algorithms directory of the reposirty and update the code map. Please add clear helper headers at the begining of your function for clear instructions.
 The added subroutines need to be included in the BioSigKit constructor. Once you added a new routine please comment and date it.
 
 ### Variable Naming
