@@ -3,9 +3,9 @@
 ## Reporting issues
 
 - **Search for existing issues (Both "closed" and "Open").** Please check to see if someone else has reported the same issue.
-- **Report your operating system and Matlab version
+- **Report your operating system and Matlab version.**
 - **Share as much information as possible.** Include operating system and version, browser and version. Also, include steps to reproduce the bug.
-- **Be patient
+- **Be patient.**
 
 ## Project Installation
 Refer to the [README](README.md).
