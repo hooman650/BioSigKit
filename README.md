@@ -1,7 +1,7 @@
 # BioSigKit
 BioSigKit is a set of useful signal processing tools in Matlab that are either developed by me personally or others in different fields of biosignal processing. BioSigKit is a wrapper with a simple visual interface that gathers this tools under a simple easy to use platform. BioSigKit's goal is to create an open source platform and umbrella for the implementation and analysis of useful signal processing algorithms. All of it's subroutines are implemented in pure MatLab script for the educational purposes even the most popular algorithms such as (Pan-Tompkins).  
 
-The ultimate goal of BioSigKit is not to be only used for ECG processing, it aims to be helpful in analysis of several different physiological signals such as EMG, ACC and EDR as well. For instance the last subroutine which is a general peak detector can already be used in many different signals even with low frequencies (Please see [the paper by Scholkmann)](http://www.mdpi.com/1999-4893/5/4/588). While its current version still does not offer more algorithms for processing of the other physiological signals, at least several more subroutines are in pipeline that will be able to do so in the near future. For instance,extracting Fetal ECG from maternal ECG using projection techniques, computing ECG derived respiration (EDR) or MUAP detection in EMG signals ([EMG toolbox (offered by the same author)](https://www.mathworks.com/matlabcentral/fileexchange/59344-toolbox-for-unsupervised-classification-of-muaps-and-action-potentials-in-emg)). 
+The ultimate goal of BioSigKit is not to be only used for ECG processing, it aims to be helpful in analysis of several different physiological signals such as EMG, ACC and EDR as well. For instance the last subroutine which is a general peak detector can already be used in many different signals even with low frequencies (Please see [the paper by Scholkmann)](http://www.mdpi.com/1999-4893/5/4/588). BioSigKit offers other subroutines for ECG-derived respiration computation, real time multi-channel and single channel Foetal ECG extraction based on non-linear filtering and neural PCA. BioSigKit also offers Psuedo-correlation template matching which has proven to be more accurate for locating MUAPs in EMG signals ([EMG toolbox (offered by the same author)](https://www.mathworks.com/matlabcentral/fileexchange/59344-toolbox-for-unsupervised-classification-of-muaps-and-action-potentials-in-emg)). Futhermore, several more subroutines enable the user to estimate the posture of the subject from 3 channel ACC recordings, as well as ACC-derived respiration estimation. Please see the cheatSheet.pdf for the list of all methods provided by BioSigKit.
 
 # QRS Detection Algorithms offered by BioSigKit
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
@@ -62,6 +62,7 @@ To see the list of all the subroutines and children accessible simply call ```an
 
 ## GUI : 
 To instantiate the GUI, simply run the ```RunBioSigKit()```.
+Please note that GUI has only been tested on windows platforms and not Unix. 
 
 ## Examples :
 See the ```Demo.m``` for a few examples on how to use BioKitSig.
@@ -80,7 +81,7 @@ BioSigKit currently uses the following libraries and I would like to appreciate 
 ### 4) [Alexandros Leontitsis. Phase-Space Computation]( http://www.geocities.com/CapeCanaveral/Lab/1421).
 
 # Inclusion of New Methods and Contribution
-Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days. If you would like to personally contribute your algorithm or work to the subroutines please use the following codemap to get an idea about the structure of BioSigKit and how you could contribute directly;
+Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days. Please read the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [Contribution guidlines](CONTRIBUTING.md) carefully before starting any contribution. If you would like to personally contribute your algorithm or work to the subroutines please use the following codemap to get an idea about the structure of BioSigKit and how you could contribute directly;
 
 ## Codemap
 ```
