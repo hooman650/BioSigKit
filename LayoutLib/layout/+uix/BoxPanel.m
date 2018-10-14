@@ -11,7 +11,7 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
     %  See also: uix.Panel, uipanel, uix.CardPanel
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $
+    %  $Revision: 1599 $ $Date: 2018-04-07 07:15:03 +1000 (Sat, 07 Apr 2018) $
     
     properties( Dependent )
         TitleColor % title background color [RGB]
@@ -44,6 +44,15 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
     properties( Constant, Access = private )
         NullTitle = char.empty( [2 0] ) % an obscure empty string, the actual panel Title
         BlankTitle = ' ' % a non-empty blank string, the empty uicontrol String
+    end
+    
+    properties
+        MaximizeTooltipString = 'Expand this panel' % tooltip string
+        MinimizeTooltipString = 'Collapse this panel' % tooltip string
+        UndockTooltipString = 'Undock this panel' % tooltip string
+        DockTooltipString = 'Dock this panel' % tooltip string
+        HelpTooltipString = 'Get help on this panel' % tooltip string
+        CloseTooltipString = 'Close this panel' % tooltip string
     end
     
     methods
@@ -84,12 +93,12 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
                 'ForegroundColor', foregroundColor, ...
                 'BackgroundColor', backgroundColor, ...
                 'FontWeight', 'bold', 'String', '?', ...
-                'TooltipString', 'Get help on this panel', 'Enable', 'on' );
+                'TooltipString', obj.HelpTooltipString, 'Enable', 'on' );
             closeButton = uix.Text( ...
                 'ForegroundColor', foregroundColor, ...
                 'BackgroundColor', backgroundColor, ...
                 'FontWeight', 'bold', 'String', char( 215 ), ...
-                'TooltipString', 'Close this panel', 'Enable', 'on' );
+                'TooltipString', obj.CloseTooltipString, 'Enable', 'on' );
             
             % Store properties
             obj.Title = obj.NullTitle;
@@ -128,15 +137,11 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
             obj.redrawButtons()
             
             % Set properties
-            if nargin > 0
-                try
-                    assert( rem( nargin, 2 ) == 0, 'uix:InvalidArgument', ...
-                        'Parameters and values must be provided in pairs.' )
-                    set( obj, varargin{:} )
-                catch e
-                    delete( obj )
-                    e.throwAsCaller()
-                end
+            try
+                uix.set( obj, varargin{:} )
+            catch e
+                delete( obj )
+                e.throwAsCaller()
             end
             
         end % constructor
@@ -283,6 +288,95 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
             value = obj.TitleBox.Position(4);
             
         end % get.TitleHeight
+        
+        function set.MaximizeTooltipString( obj, value )
+            
+            % Check
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''MaximizeTooltipString'' must be a string.' )
+            
+            % Set
+            obj.MaximizeTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.MaximizeTooltipString
+        
+        function set.MinimizeTooltipString( obj, value )
+            
+            % Check
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''MinimizeTooltipString'' must be a string.' )
+            
+            % Set
+            obj.MinimizeTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.MinimizeTooltipString
+        
+        function set.UndockTooltipString( obj, value )
+            
+            % Check
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''UndockTooltipString'' must be a string.' )
+            
+            % Set
+            obj.UndockTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.UndockTooltipString
+        
+        function set.DockTooltipString( obj, value )
+            
+            % Check
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''DockTooltipString'' must be a string.' )
+            
+            % Set
+            obj.DockTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.DockTooltipString
+        
+        function set.HelpTooltipString( obj, value )
+            
+            % Check
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''HelpTooltipString'' must be a string.' )
+            
+            % Set
+            obj.HelpTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.HelpTooltipString
+        
+        function set.CloseTooltipString( obj, value )
+            
+            % assert that value is a char array
+            assert( ischar( value ), ...
+                'uix:InvalidPropertyValue', ...
+                'Property ''CloseTooltipString'' must be a string.' )
+            
+            obj.CloseTooltipString = value;
+            
+            % Mark as dirty
+            obj.redrawButtons()
+            
+        end % set.CloseTooltipString
         
     end % accessors
     
@@ -520,28 +614,30 @@ classdef BoxPanel < uix.Panel & uix.mixin.Panel
             help = ~isempty( obj.HelpFcn );
             if help
                 helpButton.Parent = box;
+                helpButton.TooltipString = obj.HelpTooltipString;
                 box.Widths(end) = helpButton.Extent(3);
             end
             close = ~isempty( obj.CloseRequestFcn );
             if close
                 closeButton.Parent = box;
+                closeButton.TooltipString = obj.CloseTooltipString;
                 box.Widths(end) = closeButton.Extent(3);
             end
             
             % Update icons
             if obj.Minimized_
                 minimizeButton.String = char( 9662 );
-                minimizeButton.TooltipString = 'Expand this panel';
+                minimizeButton.TooltipString = obj.MaximizeTooltipString;
             else
                 minimizeButton.String = char( 9652 );
-                minimizeButton.TooltipString = 'Collapse this panel';
+                minimizeButton.TooltipString = obj.MinimizeTooltipString;
             end
             if obj.Docked_
                 dockButton.String = char( 8599 );
-                dockButton.TooltipString = 'Undock this panel';
+                dockButton.TooltipString = obj.UndockTooltipString;
             else
                 dockButton.String = char( 8600 );
-                dockButton.TooltipString = 'Dock this panel';
+                dockButton.TooltipString = obj.DockTooltipString;
             end
             
         end % redrawButtons

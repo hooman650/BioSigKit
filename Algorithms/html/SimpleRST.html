@@ -1,0 +1,624 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SimpleRST</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-02"><meta name="DC.source" content="SimpleRST.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">function [R_i,R_amp,S_i,S_amp,T_i,T_amp]=peakdetect(ecg,fs,view)</a></li><li><a href="#3">=================== Online Adaptive QRS detector ==================== %%</a></li><li><a href="#4">========================== Description ============================= %%</a></li><li><a href="#5">Inputs</a></li><li><a href="#6">Outputs</a></li><li><a href="#7">============== Licensce ========================================== %%</a></li><li><a href="#8">Updates :</a></li><li><a href="#9">============== Now Part of BioSigKit ======================== %%</a></li><li><a href="#10">========================= initialize ============================ %%</a></li><li><a href="#11">========================= preprocess ================================ %%</a></li><li><a href="#12">==================== Noise cancelation(Filtering) =================== %%</a></li><li><a href="#13">==============  define two buffers ================= %%</a></li><li><a href="#14">================== Counters ============================ %%</a></li><li><a href="#15">=start online inference (Assuming the signal is being acquired online) %%</a></li><li><a href="#17">============================= Renew Mean ======================= %%</a></li><li><a href="#18">========= Smooth  15 samples and add the new upcoming samples ======== %%</a></li><li><a href="#20">==============  Enter state 1(putative R wave) ================ %%</a></li><li><a href="#21">============= Locate R by finding highest Peak =================== %%</a></li><li><a href="#22">=== check if Sig drops below the threshold to look for S wave === %%</a></li><li><a href="#23">============ Enter S wave detection state3 (S detection) =========== %%</a></li><li><a href="#24">======= enter state 4 possible T wave detection ============ %%</a></li><li><a href="#25">======= Enter state 6 which is T wave possible detection ======%%</a></li><li><a href="#26">==== Sleep To avoid multiple detections ================== %%</a></li><li><a href="#29">============== Adjust Length of Signals ===================== %%</a></li><li><a href="#30">conditions</a></li><li><a href="#31">plottings</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [R_i,R_amp,S_i,S_amp,T_i,T_amp,Q_i,Q_amp,buffer_plot] = SimpleRST(ecg,fs,gr)
+</pre><h2 id="2">function [R_i,R_amp,S_i,S_amp,T_i,T_amp]=peakdetect(ecg,fs,view)</h2><h2 id="3">=================== Online Adaptive QRS detector ==================== %%</h2><h2 id="4">========================== Description ============================= %%</h2><p>QRS detection Detects Q , R and S waves,T Waves Uses the state-machine logic to determine different peaks in an ECG signal. It has the ability to confront noise by canceling out the noise by high pass filtering and baseline wander by low pass. Besides, check out criterion to stop detection of spikes. The code is written in a way for future online implementation.</p><h2 id="5">Inputs</h2><p>ecg : raw ecg vector fs : sampling frequency view : display results? (0: no, 1: Yes)</p><h2 id="6">Outputs</h2><p>indexes and amplitudes of R_i, R_amp, etc heart_rate computed heart rate buffer_plot : processed signal</p><h2 id="7">============== Licensce ========================================== %%</h2><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. Author : Hooman Sedghamiz, Feb, 2018 MSc. Biomedical Engineering, Linkoping University Email : <a href="mailto:Hooman.sedghamiz@gmail.com">Hooman.sedghamiz@gmail.com</a></p><h2 id="8">Updates :</h2><pre>Feb, 2018 : Clean up and fixes.</pre><h2 id="9">============== Now Part of BioSigKit ======================== %%</h2><pre class="codeinput"><span class="keyword">if</span> nargin &lt; 3
+    gr = 1;                                                                <span class="comment">% on show Sig</span>
+    <span class="keyword">if</span> nargin &lt;2
+       fs = 250;                                                           <span class="comment">% default Sampling frequency</span>
+       <span class="keyword">if</span> nargin &lt; 1
+           error(<span class="string">'You need to provide a signal!'</span>);
+       <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><pre class="codeoutput error">Error using SimpleRST (line 45)
+You need to provide a signal!
+</pre><h2 id="10">========================= initialize ============================ %%</h2><pre class="codeinput">R_i = zeros(1,length(ecg));                                                <span class="comment">% save index of R wave</span>
+R_amp = zeros(1,length(ecg));                                              <span class="comment">% save amp of R wave</span>
+S_i = zeros(1,length(ecg));                                                <span class="comment">% save index of S wave</span>
+S_amp = zeros(1,length(ecg));                                              <span class="comment">% save amp of S wave</span>
+T_i = zeros(1,length(ecg));                                                <span class="comment">% save index of T wave</span>
+T_amp = zeros(1,length(ecg));                                              <span class="comment">% save amp of T wave</span>
+Q_i = zeros(1,length(ecg));                                                <span class="comment">% vectors to store Q wave</span>
+Q_amp = zeros(1,length(ecg));                                              <span class="comment">% Vectors to store Q wave</span>
+S_amp1 = zeros(1,length(ecg));                                             <span class="comment">% Buffer to set the adaptive T wave onset</span>
+thres_p =zeros(1,length(ecg));                                             <span class="comment">% For plotting adaptive threshold</span>
+S_amp1_i = zeros(1,length(ecg));                                           <span class="comment">% To save indices of S thres</span>
+buffer_plot = zeros(1,length(ecg));
+thres2_p = zeros(1,length(ecg));                                           <span class="comment">% T wave threshold indices</span>
+window = round(0.04*fs);                                                   <span class="comment">% averaging window size</span>
+buffer_long= zeros(1,window);                                              <span class="comment">% buffer for online processing</span>
+state = 0 ;                                                                <span class="comment">% determines the state of the machine in the algorithm</span>
+c = 0;                                                                     <span class="comment">% counter to determine that the state-machine doesnt get stock in T wave detection wave</span>
+T_on = 0;                                                                  <span class="comment">% counter showing for how many samples the signal stayed above T wave threshold</span>
+T_on1=0;                                                                   <span class="comment">% counter to make sure its the real onset of T wave</span>
+S_on = 0;                                                                  <span class="comment">% counter to make sure its the real onset of S wave</span>
+sleep = 0;                                                                 <span class="comment">% counter that avoids the detection of several R waves in a short time</span>
+buffer_base=zeros(1,2*fs);                                                 <span class="comment">% buffer to determine online adaptive mean of the signal</span>
+dum = 0;                                                                   <span class="comment">% counter for detecting the exact R wave</span>
+weight = 1.8;                                                              <span class="comment">% initial value of the weigth</span>
+co = 0;                                                                    <span class="comment">% T wave counter to come out of state after a certain time</span>
+thres_p_i = zeros(1,length(ecg));                                          <span class="comment">% To save indices of main thres</span>
+thres2_p_i = zeros(1,length(ecg));                                         <span class="comment">%to save indices of T threshold</span>
+</pre><h2 id="11">========================= preprocess ================================ %%</h2><pre class="codeinput">ecg = ecg (:);                                                             <span class="comment">% make sure its a vector</span>
+ecg_raw =ecg;                                                              <span class="comment">% take the raw signal for plotting later</span>
+</pre><h2 id="12">==================== Noise cancelation(Filtering) =================== %%</h2><pre class="codeinput">f1=0.5;                                                                    <span class="comment">% cuttoff low frequency to get rid of baseline wander</span>
+f2=45;                                                                     <span class="comment">% cuttoff frequency to discard high frequency noise</span>
+Wn=[f1 f2]*2/fs;                                                           <span class="comment">% cutt off based on fs</span>
+N = 3;                                                                     <span class="comment">% order of 3 less processing</span>
+[a,b] = butter(N,Wn);                                                      <span class="comment">% bandpass filtering</span>
+ecg = filtfilt(a,b,ecg);
+</pre><h2 id="13">==============  define two buffers ================= %%</h2><pre class="codeinput">buffer_mean=mean(abs(ecg(1:2*fs)-mean(ecg(1:2*fs))));                      <span class="comment">% adaptive threshold DC corrected (baseline removed)</span>
+buffer_T = mean(ecg(1:2*fs));                                              <span class="comment">% second adaptive threshold to be used for T wave detection</span>
+</pre><h2 id="14">================== Counters ============================ %%</h2><pre class="codeinput">B_Lcounter = 0;
+B_counter = 0;
+SP_counter = 0;
+thres_p_C = 0;
+R_C = 0;
+S_C = 0;
+T_C = 0;
+Q_C = 0;
+thres2_p_C = 0;
+</pre><h2 id="15">=start online inference (Assuming the signal is being acquired online) %%</h2><pre class="codeinput"><span class="keyword">for</span> i = 1 : length(ecg)
+</pre><pre class="codeinput"> B_Lcounter = B_Lcounter + 1;
+ buffer_long(B_Lcounter) = ecg(i);                                         <span class="comment">% save the upcoming new samples</span>
+ <span class="keyword">if</span> B_Lcounter &gt; window
+    B_Lcounter = 0;
+ <span class="keyword">end</span>
+
+ B_counter = B_counter + 1;
+ buffer_base(B_counter) = ecg(i);                                          <span class="comment">% save the baseline samples</span>
+</pre><h2 id="17">============================= Renew Mean ======================= %%</h2><pre class="codeinput"> <span class="keyword">if</span> B_counter &gt;= 2*fs
+    buffer_mean = mean(abs(buffer_base - mean(buffer_base)));
+    buffer_T = mean(buffer_base);
+    B_counter = 0;
+ <span class="keyword">end</span>
+</pre><h2 id="18">========= Smooth  15 samples and add the new upcoming samples ======== %%</h2><pre class="codeinput">  <span class="keyword">if</span> i &gt;= window                                                  <span class="comment">% take a window with length 15 samples for averaging</span>
+</pre><pre class="codeinput">      mean_online = mean(buffer_long);                       <span class="comment">% take the mean</span>
+      SP_counter = SP_counter + 1;
+      buffer_plot(SP_counter) = mean_online;                               <span class="comment">% save the processed signal</span>
+</pre><h2 id="20">==============  Enter state 1(putative R wave) ================ %%</h2><pre class="codeinput">    <span class="keyword">if</span> state == 0
+     <span class="keyword">if</span> SP_counter &gt;= 3                                                                         <span class="comment">% added to handle bugg for now</span>
+      <span class="keyword">if</span> (mean_online &gt; buffer_mean*weight) &amp;&amp; (buffer_plot(i-1-window) &gt; buffer_plot(i-window))    <span class="comment">% 2.4*buffer_mean</span>
+          state = 1;                                                                            <span class="comment">% entered R peak detection mode</span>
+          currentmax = buffer_plot(i-1-window);
+          ind = i-1-window;
+          thres_p_C = thres_p_C + 1;
+          thres_p(thres_p_C) = buffer_mean*weight;
+          thres_p_i(thres_p_C) = ind;
+      <span class="keyword">else</span>
+          state = 0;
+      <span class="keyword">end</span>
+     <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="21">============= Locate R by finding highest Peak =================== %%</h2><pre class="codeinput">      <span class="keyword">if</span> state == 1                                                        <span class="comment">% look for the highest peak</span>
+            <span class="keyword">if</span>  currentmax &gt; buffer_plot(i-window)
+                dum = dum + 1;
+                <span class="keyword">if</span> dum &gt; 4
+                   R_C = R_C + 1;
+                   R_i(R_C) = ind;                                          <span class="comment">% save index</span>
+                   R_amp(R_C) = buffer_plot(ind);                          <span class="comment">% save index</span>
+                <span class="comment">%-------------- Locate Q wave --------------------%</span>
+                  [Q_tamp,Q_ti] = min(buffer_plot(ind-round(0.040*fs):(ind)));
+                  Q_ti = ind-round(0.040*fs) + Q_ti -1;
+                  Q_C = Q_C + 1;
+                  Q_i(Q_C) = Q_ti;
+                  Q_amp(Q_C) = Q_tamp;
+                  <span class="keyword">if</span> R_C &gt; 8
+                     weight = 0.30*mean(R_amp(R_C-7:R_C));                  <span class="comment">% calculate the 35% of the last 8 R waves</span>
+                     weight = weight/buffer_mean;
+                  <span class="keyword">end</span>
+                  state = 2;                                                <span class="comment">% enter S detection mode state 2</span>
+                  dum = 0;
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                dum = 0;
+                state = 0;
+            <span class="keyword">end</span>
+
+      <span class="keyword">end</span>
+</pre><h2 id="22">=== check if Sig drops below the threshold to look for S wave === %%</h2><pre class="codeinput">      <span class="keyword">if</span> state == 2
+        <span class="keyword">if</span>  mean_online &lt;= buffer_mean                                     <span class="comment">% check the threshold</span>
+             state = 3;                                                    <span class="comment">% enter S detection</span>
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+</pre><h2 id="23">============ Enter S wave detection state3 (S detection) =========== %%</h2><pre class="codeinput">         <span class="keyword">if</span> state == 3
+            co = co + 1;
+          <span class="keyword">if</span> co &lt; round(0.200*fs)
+            <span class="keyword">if</span> buffer_plot(i-window-1) &lt;= buffer_plot(i-window)            <span class="comment">% see when the slope changes</span>
+             S_on = S_on + 1;                                              <span class="comment">% set a counter to see if its a real change or just noise</span>
+             <span class="keyword">if</span> S_on &gt;= round(0.0120*fs)
+                S_C = S_C + 1;
+                S_i(S_C) = i-window-4;                                     <span class="comment">% save index of S wave</span>
+                S_amp(S_C) = buffer_plot(i-window-4);                      <span class="comment">% save index</span>
+                S_amp1(S_C) = buffer_plot(i-window-4);                     <span class="comment">% ecg(i-4)</span>
+                S_amp1_i(S_C) = ind;                                       <span class="comment">% index of S_amp1_i</span>
+                state = 4;                                                 <span class="comment">% enter T detection mode</span>
+                S_on = 0;
+                co = 0;
+             <span class="keyword">end</span>
+            <span class="keyword">end</span>
+          <span class="keyword">else</span>
+                state = 4;
+                co = 0;
+          <span class="keyword">end</span>
+          <span class="keyword">end</span>
+</pre><h2 id="24">======= enter state 4 possible T wave detection ============ %%</h2><pre class="codeinput">       <span class="keyword">if</span> state == 4
+         <span class="keyword">if</span> mean_online &lt; buffer_mean                                      <span class="comment">% See if the signal drops below mean</span>
+           state = 6;                                                      <span class="comment">% Confirm</span>
+         <span class="keyword">end</span>
+       <span class="keyword">end</span>
+</pre><h2 id="25">======= Enter state 6 which is T wave possible detection ======%%</h2><pre class="codeinput">       <span class="keyword">if</span> state ==6
+         c = c + 1;                                                        <span class="comment">% set a counter to exit the state if no T wave detected after 0.3 second</span>
+         <span class="keyword">if</span> c &lt;= 0.7*fs
+             <span class="comment">%------------------------------------------------------------%</span>
+             <span class="comment">% set a double threshold based on the last detected S wave and</span>
+             <span class="comment">% baseline of the signal and look for T wave in between these</span>
+             <span class="comment">% two threshold</span>
+             <span class="comment">%------------------------------------------------------------%</span>
+             thres2 = ((abs(abs(buffer_T)-abs(S_amp1(S_C))))*3/4 + S_amp1(S_C));
+             thres2_p_C = thres2_p_C + 1;
+             thres2_p(thres2_p_C) = thres2;
+             thres2_p_i(thres2_p_C) = ind;
+             <span class="keyword">if</span> mean_online &gt; thres2
+              T_on = T_on +1;                                              <span class="comment">% make sure it stays on for at least 3 samples</span>
+              <span class="keyword">if</span> T_on &gt;= round(0.0120*fs)
+               <span class="keyword">if</span> buffer_plot(i-window-1)&gt;= buffer_plot(i-window)
+                   T_on1 = T_on1+1;                                        <span class="comment">% make sure its a real slope change</span>
+                  <span class="keyword">if</span> T_on1 &gt; round(0.0320*fs)
+                   T_C = T_C + 1;
+                   T_i(T_C) = i-window-11;                                 <span class="comment">% save index of T wave</span>
+                   T_amp(T_C) = buffer_plot(i-window-11);                  <span class="comment">% save index</span>
+                   state = 5;                                              <span class="comment">% enter sleep mode</span>
+                   T_on = 0;
+                   T_on1 = 0;
+                  <span class="keyword">end</span>
+               <span class="keyword">end</span>
+              <span class="keyword">end</span>
+             <span class="keyword">end</span>
+         <span class="keyword">else</span>
+             state= 5;                                                     <span class="comment">% enter Sleep mode</span>
+         <span class="keyword">end</span>
+
+       <span class="keyword">end</span>
+</pre><h2 id="26">==== Sleep To avoid multiple detections ================== %%</h2><pre class="codeinput">       <span class="keyword">if</span> state==5
+           sleep =sleep+c+1;
+           c = 0;
+           <span class="keyword">if</span> sleep/fs &gt;= 0.400
+               state = 0;
+               sleep = 0;
+           <span class="keyword">end</span>
+       <span class="keyword">end</span>
+</pre><pre class="codeinput">  <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="29">============== Adjust Length of Signals ===================== %%</h2><pre class="codeinput">R_i = R_i(1:R_C);
+S_i = S_i(1:S_C);
+S_amp1 = S_amp1(1:S_C);
+S_amp1_i = S_amp1_i(1:S_C);
+T_i = T_i(1:T_C);
+Q_i = Q_i(1:Q_C);
+thres_p_i = thres_p_i(1:thres_p_C);
+thres_p = thres_p(1:thres_p_C);
+buffer_plot = buffer_plot(1:SP_counter);
+thres2_p = thres2_p(1:thres2_p_C);
+thres2_p_i = thres2_p_i(1:thres2_p_C);
+</pre><h2 id="30">conditions</h2><pre class="codeinput"><span class="comment">%heart_rate=R_C/(time_scale/60); % calculate heart rate</span>
+<span class="comment">%msgbox(strcat('Heart-rate is = ',mat2str(heart_rate)));</span>
+</pre><h2 id="31">plottings</h2><pre class="codeinput"><span class="keyword">if</span> gr
+   view = length(ecg)/fs;
+   time = 1/fs:1/fs:view;
+   R = find(R_i &lt;= view*fs);                                                  <span class="comment">% determine the length for plotting vectors</span>
+   S = find(S_i &lt;= view*fs);                                                  <span class="comment">% determine the length for plotting vectors</span>
+   T = find(T_i &lt;= view*fs);                                                  <span class="comment">% determine the length for plotting vectors</span>
+   Q = find(Q_i &lt;= view*fs);                                                  <span class="comment">% determine the length for plotting vectors</span>
+   L1 = find(thres_p_i &lt;= view*fs);
+   L2 = find(S_amp1_i &lt;= view*fs);
+   L3 = find(thres2_p_i &lt;= view*fs);
+   <span class="keyword">if</span> view*fs &gt; length(buffer_plot)
+      ax(1) = subplot(211);plot(time(1:length(buffer_plot)),buffer_plot(1:end));
+   <span class="keyword">else</span>
+      ax(1) = subplot(211);plot(time,buffer_plot(1:(view*fs)));
+   <span class="keyword">end</span>
+   axis <span class="string">tight</span>;
+   hold <span class="string">on</span>,scatter(R_i(1:R(end))./fs,R_amp(1:R(end)),<span class="string">'r'</span>);
+   hold <span class="string">on</span>,scatter(S_i(1:S(end))./fs,S_amp(1:S(end)),<span class="string">'g'</span>);
+   hold <span class="string">on</span>,scatter(T_i(1:T(end))./fs,T_amp(1:T(end)),<span class="string">'k'</span>);
+   hold <span class="string">on</span>,scatter(Q_i(1:Q(end))./fs,Q_amp(1:Q(end)),<span class="string">'m'</span>);
+   hold <span class="string">on</span>,plot(thres_p_i(1:L1(end))./fs,thres_p(1:L1(end)),<span class="string">'LineStyle'</span>,<span class="string">'-.'</span>,<span class="string">'color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>,2.5);
+   hold <span class="string">on</span>,plot(S_amp1_i(1:L2(end))./fs,S_amp1(1:L2(end)),<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'color'</span>,<span class="string">'c'</span>,<span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>,2.5);
+   hold <span class="string">on</span>,plot(thres2_p_i(1:L3(end))./fs,thres2_p(1:L3(end)),<span class="string">'-k'</span>,<span class="string">'LineWidth'</span>,2);
+   legend(<span class="string">'Raw ECG Signal'</span>,<span class="string">'R wave'</span>,<span class="string">'S wave'</span>,<span class="string">'T wave'</span>,<span class="string">'R adaptive thres'</span>,<span class="string">'Latest S wave'</span>,<span class="string">'T wave adaptive threshold threshold'</span>,<span class="string">'Location'</span>,<span class="string">'NorthOutside'</span>,<span class="string">'Orientation'</span>,<span class="string">'horizontal'</span>);
+   xlabel(<span class="string">'Time(sec)'</span>),ylabel(<span class="string">'V'</span>);
+   axis <span class="string">tight</span>;
+   title(<span class="string">'Zoom in to see both signal details overlaied'</span>);
+   title(<span class="string">'Filtered, smoothed and processed signal'</span>);
+   ax(2) =subplot(212);
+   plot(time,ecg_raw(1:(round(view*fs))));
+   title(<span class="string">'Raw ECG'</span>)
+   xlabel(<span class="string">'Time(sec)'</span>),ylabel(<span class="string">'V'</span>);
+   legend();
+   linkaxes(ax,<span class="string">'x'</span>);
+   zoom <span class="string">on</span>;
+   axis <span class="string">tight</span>;
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [R_i,R_amp,S_i,S_amp,T_i,T_amp,Q_i,Q_amp,buffer_plot] = SimpleRST(ecg,fs,gr)
+%% function [R_i,R_amp,S_i,S_amp,T_i,T_amp]=peakdetect(ecg,fs,view)
+%% =================== Online Adaptive QRS detector ==================== %%
+%% ========================== Description ============================= %%
+% QRS detection
+% Detects Q , R and S waves,T Waves
+% Uses the state-machine logic to determine different peaks in an ECG
+% signal. It has the ability to confront noise by canceling out the noise
+% by high pass filtering and baseline wander by low pass. Besides, check
+% out criterion to stop detection of spikes.
+% The code is written in a way for future online implementation.
+%% Inputs
+% ecg : raw ecg vector
+% fs : sampling frequency
+% view : display results? (0: no, 1: Yes)
+
+%% Outputs
+% indexes and amplitudes of R_i, R_amp, etc
+% heart_rate computed heart rate
+% buffer_plot : processed signal
+%% ============== Licensce ========================================== %%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+% "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+% LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+% FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+% OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+% TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+% PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+% LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+% NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% Author :
+% Hooman Sedghamiz, Feb, 2018
+% MSc. Biomedical Engineering, Linkoping University
+% Email : Hooman.sedghamiz@gmail.com
+%% Updates :
+%  Feb, 2018 : Clean up and fixes.
+%% ============== Now Part of BioSigKit ======================== %%
+if nargin < 3
+    gr = 1;                                                                % on show Sig
+    if nargin <2
+       fs = 250;                                                           % default Sampling frequency
+       if nargin < 1
+           error('You need to provide a signal!');
+       end
+    end 
+end
+
+%% ========================= initialize ============================ %%
+R_i = zeros(1,length(ecg));                                                % save index of R wave
+R_amp = zeros(1,length(ecg));                                              % save amp of R wave
+S_i = zeros(1,length(ecg));                                                % save index of S wave
+S_amp = zeros(1,length(ecg));                                              % save amp of S wave
+T_i = zeros(1,length(ecg));                                                % save index of T wave
+T_amp = zeros(1,length(ecg));                                              % save amp of T wave
+Q_i = zeros(1,length(ecg));                                                % vectors to store Q wave
+Q_amp = zeros(1,length(ecg));                                              % Vectors to store Q wave
+S_amp1 = zeros(1,length(ecg));                                             % Buffer to set the adaptive T wave onset
+thres_p =zeros(1,length(ecg));                                             % For plotting adaptive threshold
+S_amp1_i = zeros(1,length(ecg));                                           % To save indices of S thres
+buffer_plot = zeros(1,length(ecg));
+thres2_p = zeros(1,length(ecg));                                           % T wave threshold indices
+window = round(0.04*fs);                                                   % averaging window size
+buffer_long= zeros(1,window);                                              % buffer for online processing
+state = 0 ;                                                                % determines the state of the machine in the algorithm
+c = 0;                                                                     % counter to determine that the state-machine doesnt get stock in T wave detection wave
+T_on = 0;                                                                  % counter showing for how many samples the signal stayed above T wave threshold
+T_on1=0;                                                                   % counter to make sure its the real onset of T wave
+S_on = 0;                                                                  % counter to make sure its the real onset of S wave
+sleep = 0;                                                                 % counter that avoids the detection of several R waves in a short time
+buffer_base=zeros(1,2*fs);                                                 % buffer to determine online adaptive mean of the signal
+dum = 0;                                                                   % counter for detecting the exact R wave
+weight = 1.8;                                                              % initial value of the weigth
+co = 0;                                                                    % T wave counter to come out of state after a certain time
+thres_p_i = zeros(1,length(ecg));                                          % To save indices of main thres
+thres2_p_i = zeros(1,length(ecg));                                         %to save indices of T threshold
+%% ========================= preprocess ================================ %%
+ecg = ecg (:);                                                             % make sure its a vector
+ecg_raw =ecg;                                                              % take the raw signal for plotting later
+%% ==================== Noise cancelation(Filtering) =================== %% 
+f1=0.5;                                                                    % cuttoff low frequency to get rid of baseline wander
+f2=45;                                                                     % cuttoff frequency to discard high frequency noise
+Wn=[f1 f2]*2/fs;                                                           % cutt off based on fs
+N = 3;                                                                     % order of 3 less processing
+[a,b] = butter(N,Wn);                                                      % bandpass filtering
+ecg = filtfilt(a,b,ecg);
+
+%% ==============  define two buffers ================= %%
+
+buffer_mean=mean(abs(ecg(1:2*fs)-mean(ecg(1:2*fs))));                      % adaptive threshold DC corrected (baseline removed)
+buffer_T = mean(ecg(1:2*fs));                                              % second adaptive threshold to be used for T wave detection
+%% ================== Counters ============================ %%
+B_Lcounter = 0;
+B_counter = 0;
+SP_counter = 0;
+thres_p_C = 0;
+R_C = 0;
+S_C = 0;
+T_C = 0;
+Q_C = 0;
+thres2_p_C = 0;
+%% =start online inference (Assuming the signal is being acquired online) %%
+for i = 1 : length(ecg)
+ B_Lcounter = B_Lcounter + 1;  
+ buffer_long(B_Lcounter) = ecg(i);                                         % save the upcoming new samples
+ if B_Lcounter > window
+    B_Lcounter = 0; 
+ end
+
+ B_counter = B_counter + 1;
+ buffer_base(B_counter) = ecg(i);                                          % save the baseline samples
+
+%% ============================= Renew Mean ======================= %%
+ if B_counter >= 2*fs
+    buffer_mean = mean(abs(buffer_base - mean(buffer_base)));
+    buffer_T = mean(buffer_base);
+    B_counter = 0;
+ end
+
+%% ========= Smooth  15 samples and add the new upcoming samples ======== %%
+  if i >= window                                                  % take a window with length 15 samples for averaging
+      mean_online = mean(buffer_long);                       % take the mean
+      SP_counter = SP_counter + 1;
+      buffer_plot(SP_counter) = mean_online;                               % save the processed signal
+      
+      
+    %% ==============  Enter state 1(putative R wave) ================ %%
+    if state == 0  
+     if SP_counter >= 3                                                                         % added to handle bugg for now
+      if (mean_online > buffer_mean*weight) && (buffer_plot(i-1-window) > buffer_plot(i-window))    % 2.4*buffer_mean   
+          state = 1;                                                                            % entered R peak detection mode
+          currentmax = buffer_plot(i-1-window);
+          ind = i-1-window;
+          thres_p_C = thres_p_C + 1;
+          thres_p(thres_p_C) = buffer_mean*weight;
+          thres_p_i(thres_p_C) = ind;
+      else     
+          state = 0;
+      end
+     end
+    end
+    
+%% ============= Locate R by finding highest Peak =================== %%
+      if state == 1                                                        % look for the highest peak
+            if  currentmax > buffer_plot(i-window)
+                dum = dum + 1;
+                if dum > 4 
+                   R_C = R_C + 1;
+                   R_i(R_C) = ind;                                          % save index
+                   R_amp(R_C) = buffer_plot(ind);                          % save index
+                %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Locate Q wave REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+                  [Q_tamp,Q_ti] = min(buffer_plot(ind-round(0.040*fs):(ind)));
+                  Q_ti = ind-round(0.040*fs) + Q_ti -1;
+                  Q_C = Q_C + 1;
+                  Q_i(Q_C) = Q_ti;
+                  Q_amp(Q_C) = Q_tamp;                           
+                  if R_C > 8
+                     weight = 0.30*mean(R_amp(R_C-7:R_C));                  % calculate the 35% of the last 8 R waves
+                     weight = weight/buffer_mean;
+                  end
+                  state = 2;                                                % enter S detection mode state 2
+                  dum = 0;
+                end
+            else
+                dum = 0;
+                state = 0;
+            end 
+            
+      end
+      
+  %% === check if Sig drops below the threshold to look for S wave === %%
+      if state == 2 
+        if  mean_online <= buffer_mean                                     % check the threshold
+             state = 3;                                                    % enter S detection           
+        end
+      end
+      
+  %% ============ Enter S wave detection state3 (S detection) =========== %%
+         if state == 3
+            co = co + 1;    
+          if co < round(0.200*fs)
+            if buffer_plot(i-window-1) <= buffer_plot(i-window)            % see when the slope changes
+             S_on = S_on + 1;                                              % set a counter to see if its a real change or just noise
+             if S_on >= round(0.0120*fs)
+                S_C = S_C + 1;
+                S_i(S_C) = i-window-4;                                     % save index of S wave
+                S_amp(S_C) = buffer_plot(i-window-4);                      % save index
+                S_amp1(S_C) = buffer_plot(i-window-4);                     % ecg(i-4)
+                S_amp1_i(S_C) = ind;                                       % index of S_amp1_i
+                state = 4;                                                 % enter T detection mode
+                S_on = 0;
+                co = 0;
+             end
+            end
+          else
+                state = 4;
+                co = 0;
+          end
+          end
+      
+       %% ======= enter state 4 possible T wave detection ============ %%
+       if state == 4    
+         if mean_online < buffer_mean                                      % See if the signal drops below mean 
+           state = 6;                                                      % Confirm
+         end
+       end
+       %% ======= Enter state 6 which is T wave possible detection ======%%
+       if state ==6   
+         c = c + 1;                                                        % set a counter to exit the state if no T wave detected after 0.3 second
+         if c <= 0.7*fs  
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+             % set a double threshold based on the last detected S wave and
+             % baseline of the signal and look for T wave in between these
+             % two threshold
+             %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+             thres2 = ((abs(abs(buffer_T)-abs(S_amp1(S_C))))*3/4 + S_amp1(S_C)); 
+             thres2_p_C = thres2_p_C + 1;
+             thres2_p(thres2_p_C) = thres2;
+             thres2_p_i(thres2_p_C) = ind;
+             if mean_online > thres2
+              T_on = T_on +1;                                              % make sure it stays on for at least 3 samples
+              if T_on >= round(0.0120*fs)
+               if buffer_plot(i-window-1)>= buffer_plot(i-window)
+                   T_on1 = T_on1+1;                                        % make sure its a real slope change
+                  if T_on1 > round(0.0320*fs) 
+                   T_C = T_C + 1;
+                   T_i(T_C) = i-window-11;                                 % save index of T wave
+                   T_amp(T_C) = buffer_plot(i-window-11);                  % save index
+                   state = 5;                                              % enter sleep mode
+                   T_on = 0;
+                   T_on1 = 0;
+                  end                      
+               end
+              end
+             end         
+         else
+             state= 5;                                                     % enter Sleep mode
+         end
+         
+       end  
+  %% ==== Sleep To avoid multiple detections ================== %%
+       if state==5
+           sleep =sleep+c+1;
+           c = 0;
+           if sleep/fs >= 0.400
+               state = 0;
+               sleep = 0;
+           end  
+       end     
+  end
+  
+end
+%% ============== Adjust Length of Signals ===================== %%
+R_i = R_i(1:R_C);
+S_i = S_i(1:S_C);
+S_amp1 = S_amp1(1:S_C);
+S_amp1_i = S_amp1_i(1:S_C);
+T_i = T_i(1:T_C);
+Q_i = Q_i(1:Q_C);
+thres_p_i = thres_p_i(1:thres_p_C);
+thres_p = thres_p(1:thres_p_C);
+buffer_plot = buffer_plot(1:SP_counter);
+thres2_p = thres2_p(1:thres2_p_C);
+thres2_p_i = thres2_p_i(1:thres2_p_C);
+%% conditions
+%heart_rate=R_C/(time_scale/60); % calculate heart rate
+%msgbox(strcat('Heart-rate is = ',mat2str(heart_rate)));
+
+
+%% plottings 
+if gr
+   view = length(ecg)/fs;
+   time = 1/fs:1/fs:view;
+   R = find(R_i <= view*fs);                                                  % determine the length for plotting vectors
+   S = find(S_i <= view*fs);                                                  % determine the length for plotting vectors
+   T = find(T_i <= view*fs);                                                  % determine the length for plotting vectors
+   Q = find(Q_i <= view*fs);                                                  % determine the length for plotting vectors
+   L1 = find(thres_p_i <= view*fs);
+   L2 = find(S_amp1_i <= view*fs);
+   L3 = find(thres2_p_i <= view*fs);
+   if view*fs > length(buffer_plot)
+      ax(1) = subplot(211);plot(time(1:length(buffer_plot)),buffer_plot(1:end));   
+   else
+      ax(1) = subplot(211);plot(time,buffer_plot(1:(view*fs)));
+   end
+   axis tight;
+   hold on,scatter(R_i(1:R(end))./fs,R_amp(1:R(end)),'r');
+   hold on,scatter(S_i(1:S(end))./fs,S_amp(1:S(end)),'g');
+   hold on,scatter(T_i(1:T(end))./fs,T_amp(1:T(end)),'k');
+   hold on,scatter(Q_i(1:Q(end))./fs,Q_amp(1:Q(end)),'m');
+   hold on,plot(thres_p_i(1:L1(end))./fs,thres_p(1:L1(end)),'LineStyle','-.','color','r',...
+    'LineWidth',2.5);
+   hold on,plot(S_amp1_i(1:L2(end))./fs,S_amp1(1:L2(end)),'LineStyle','REPLACE_WITH_DASH_DASH','color','c',...
+    'LineWidth',2.5);
+   hold on,plot(thres2_p_i(1:L3(end))./fs,thres2_p(1:L3(end)),'-k','LineWidth',2);
+   legend('Raw ECG Signal','R wave','S wave','T wave','R adaptive thres','Latest S wave','T wave adaptive threshold threshold','Location','NorthOutside','Orientation','horizontal'); 
+   xlabel('Time(sec)'),ylabel('V');
+   axis tight; 
+   title('Zoom in to see both signal details overlaied');
+   title('Filtered, smoothed and processed signal');
+   ax(2) =subplot(212);
+   plot(time,ecg_raw(1:(round(view*fs))));
+   title('Raw ECG')
+   xlabel('Time(sec)'),ylabel('V');
+   legend(); 
+   linkaxes(ax,'x');
+   zoom on;
+   axis tight;
+end
+##### SOURCE END #####
+--></body></html>

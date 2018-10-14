@@ -1,4 +1,4 @@
-classdef Divider < matlab.mixin.SetGet
+classdef ( Hidden ) Divider < matlab.mixin.SetGet
     %uix.Divider  Draggable divider
     %
     %  d = uix.Divider() creates a divider.
@@ -7,7 +7,7 @@ classdef Divider < matlab.mixin.SetGet
     %  specified property p1 to value v1, etc.
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $
+    %  $Revision: 1601 $ $Date: 2018-05-01 10:22:53 +0100 (Tue, 01 May 2018) $
     
     properties( Dependent )
         Parent % parent
@@ -51,15 +51,11 @@ classdef Divider < matlab.mixin.SetGet
             obj.Control = control;
             
             % Set properties
-            if nargin > 0
-                try
-                    assert( rem( nargin, 2 ) == 0, 'uix:InvalidArgument', ...
-                        'Parameters and values must be provided in pairs.' )
-                    set( obj, varargin{:} )
-                catch e
-                    delete( obj )
-                    e.throwAsCaller()
-                end
+            try
+                uix.set( obj, varargin{:} )
+            catch e
+                delete( obj )
+                e.throwAsCaller()
             end
             
             % Force update
@@ -256,8 +252,14 @@ classdef Divider < matlab.mixin.SetGet
             %  tf = d.isMouseOver(wmd) tests whether the WindowMouseData
             %  wmd is consistent with the mouse pointer being over the
             %  divider d.
+            %
+            %  This method returns false for dividers that are being
+            %  deleted.
             
-            tf = reshape( [obj.Control] == eventData.HitObject, size( obj ) );
+            tf = isvalid( obj ); % initialize
+            for ii = 1:numel( obj )
+                tf(ii) = tf(ii) && obj(ii).Control == eventData.HitObject;
+            end
             
         end % isMouseOver
         

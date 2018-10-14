@@ -5,7 +5,7 @@ classdef Box < uix.Container & uix.mixin.Container
     %  contents.
     
     %  Copyright 2009-2015 The MathWorks, Inc.
-    %  $Revision: 1165 $ $Date: 2015-12-06 03:09:17 -0500 (Sun, 06 Dec 2015) $
+    %  $Revision: 1594 $ $Date: 2018-03-28 02:27:52 +1100 (Wed, 28 Mar 2018) $
     
     properties( Access = public, Dependent, AbortSet )
         Spacing = 0 % space between contents, in pixels

@@ -14,7 +14,7 @@ classdef TabPanel < uix.Container & uix.mixin.Panel
     %  See also: uitabgroup, uitab, uix.CardPanel
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $
+    %  $Revision: 1480 $ $Date: 2017-02-15 16:56:13 +0100 (Wed, 15 Feb 2017) $
     
     properties( Access = public, Dependent, AbortSet )
         FontAngle % font angle
@@ -101,15 +101,11 @@ classdef TabPanel < uix.Container & uix.mixin.Panel
             obj.ParentListener = parentListener;
             
             % Set properties
-            if nargin > 0
-                try
-                    assert( rem( nargin, 2 ) == 0, 'uix:InvalidArgument', ...
-                        'Parameters and values must be provided in pairs.' )
-                    set( obj, varargin{:} )
-                catch e
-                    delete( obj )
-                    e.throwAsCaller()
-                end
+            try
+                uix.set( obj, varargin{:} )
+            catch e
+                delete( obj )
+                e.throwAsCaller()
             end
             
         end % constructor

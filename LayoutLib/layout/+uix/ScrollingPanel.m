@@ -10,7 +10,7 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
     %  See also: uix.Panel, uix.BoxPanel, uix.TabPanel, uicontainer
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1455 $ $Date: 2017-01-26 20:34:18 +0000 (Thu, 26 Jan 2017) $
+    %  $Revision: 1604 $ $Date: 2018-05-01 11:45:20 +0100 (Tue, 01 May 2018) $
     
     properties( Dependent )
         Heights % heights of contents, in pixels and/or weights
@@ -39,12 +39,18 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
     properties( Access = private )
         MouseWheelListener = [] % mouse listener
         MouseWheelEnabled_ = 'on' %
-        SliderListener = [] % slider listener
+        ScrollingListener = [] % slider listener
+        ScrolledListener = [] % slider listener
     end
     
     properties( Constant, Access = protected )
         SliderSize = 20 % slider size, in pixels
         SliderStep = 10 % slider step, in pixels
+    end
+    
+    events( NotifyAccess = private )
+        Scrolling
+        Scrolled
     end
     
     methods
@@ -58,15 +64,11 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
             %  value v1, etc.
             
             % Set properties
-            if nargin > 0
-                try
-                    assert( rem( nargin, 2 ) == 0, 'uix:InvalidArgument', ...
-                        'Parameters and values must be provided in pairs.' )
-                    set( obj, varargin{:} )
-                catch e
-                    delete( obj )
-                    e.throwAsCaller()
-                end
+            try
+                uix.set( obj, varargin{:} )
+            catch e
+                delete( obj )
+                e.throwAsCaller()
             end
             
         end % constructor
@@ -163,11 +165,8 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
             
             % Set
             sliders = obj.VerticalSliders;
-            heights = obj.Heights_;
             for ii = 1:numel( sliders )
-                if heights(ii) > 0
-                    sliders(ii).Value = -value(ii) - 1;
-                end
+                sliders(ii).Value = -value(ii) - 1;
             end
             
             % Mark as dirty
@@ -295,11 +294,8 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
             
             % Set
             sliders = obj.HorizontalSliders;
-            widths = obj.Widths_;
             for ii = 1:numel( sliders )
-                if widths(ii) > 0
-                    sliders(ii).Value = value(ii);
-                end
+                sliders(ii).Value = value(ii);
             end
             
             % Mark as dirty
@@ -490,7 +486,7 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
                 'Style', 'text', 'Enable', 'inactive' );
             obj.VerticalSteps_(end+1,:) = obj.SliderStep;
             obj.HorizontalSteps_(end+1,:) = obj.SliderStep;
-            obj.updateSliderListener()
+            obj.updateSliderListeners()
             
             % Call superclass method
             addChild@uix.mixin.Panel( obj, child )
@@ -513,7 +509,7 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
             obj.BlankingPlates(tf,:) = [];
             obj.VerticalSteps_(tf,:) = [];
             obj.HorizontalSteps_(tf,:) = [];
-            obj.updateSliderListener()
+            obj.updateSliderListeners()
             
             % Call superclass method
             removeChild@uix.mixin.Panel( obj, child )
@@ -588,13 +584,27 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
     
     methods( Access = private )
         
-        function onSliderValueChanged( obj, ~, ~ )
-            %onSliderValueChanged  Event handler
+        function onSliderScrolling( obj, ~, ~ )
+            %onSliderScrolling  Event handler
             
             % Mark as dirty
             obj.Dirty = true;
             
-        end % onSliderValueChanged
+            % Raise event
+            notify( obj, 'Scrolling' )
+            
+        end % onSliderScrolling
+        
+        function onSliderScrolled( obj, ~, ~ )
+            %onSliderScrolled  Event handler
+            
+            % Mark as dirty
+            obj.Dirty = true;
+            
+            % Raise event
+            notify( obj, 'Scrolled' )
+            
+        end % onSliderScrolled
         
         function onMouseScrolled( obj, ~, eventData )
             %onMouseScrolled  Event handler
@@ -610,15 +620,18 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
                 % Check that pointer is over panel
                 if cp(1) < pp(1) || cp(1) > pp(1) + pp(3) || ...
                         cp(2) < pp(2) || cp(2) > pp(2) + pp(4), return, end
-                % Compute delta
-                delta = eventData.VerticalScrollCount * ...
-                    eventData.VerticalScrollAmount * obj.VerticalSteps(sel);
                 % Scroll
-                if obj.Heights_(sel) > 0 % scroll vertically
+                if strcmp( obj.VerticalSliders(sel).Enable, 'on' ) % scroll vertically
+                    delta = eventData.VerticalScrollCount * ...
+                        eventData.VerticalScrollAmount * obj.VerticalSteps(sel);
                     obj.VerticalOffsets(sel) = obj.VerticalOffsets(sel) + delta;
-                elseif obj.Widths_(sel) > 0 % scroll horizontally
+                elseif strcmp( obj.HorizontalSliders(sel).Enable, 'on' ) % scroll horizontally
+                    delta = eventData.VerticalScrollCount * ...
+                        eventData.VerticalScrollAmount * obj.HorizontalSteps(sel);
                     obj.HorizontalOffsets(sel) = obj.HorizontalOffsets(sel) + delta;
                 end
+                % Raise event
+                notify( obj, 'Scrolled' )
             end
             
         end % onMouseScrolled
@@ -627,18 +640,22 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
     
     methods( Access = private )
         
-        function updateSliderListener( obj )
-            %updateSliderListener  Update listener to slider events
+        function updateSliderListeners( obj )
+            %updateSliderListeners  Update listeners to slider events
             
             if isempty( obj.VerticalSliders )
-                obj.SliderListener = [];
+                obj.ScrollingListener = [];
+                obj.ScrolledListener = [];
             else
-                obj.SliderListener = event.listener( ...
+                obj.ScrollingListener = event.listener( ...
                     [obj.VerticalSliders; obj.HorizontalSliders], ...
-                    'ContinuousValueChange', @obj.onSliderValueChanged );
+                    'ContinuousValueChange', @obj.onSliderScrolling );
+                obj.ScrolledListener = event.listener( ...
+                    [obj.VerticalSliders; obj.HorizontalSliders], ...
+                    'Action', @obj.onSliderScrolled );
             end
             
-        end % updateSliderListener
+        end % updateSliderListeners
         
     end % helpers
     

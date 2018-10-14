@@ -1,0 +1,776 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>pan_tompkin</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-07-02"><meta name="DC.source" content="pan_tompkin.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">function [qrs_amp_raw,qrs_i_raw,delay]=pan_tompkin(ecg,fs)</a></li><li><a href="#3">Inputs</a></li><li><a href="#4">Outputs</a></li><li><a href="#5">Method</a></li><li><a href="#6">References :</a></li><li><a href="#7">============== Licensce ========================================== %%</a></li><li><a href="#8">============ Update History ================== %%</a></li><li><a href="#9">================= Now Part of BioSigKit ==================== %%</a></li><li><a href="#10">======================= Initialize =============================== %</a></li><li><a href="#11">============ Noise cancelation(Filtering)( 5-15 Hz) =============== %%</a></li><li><a href="#13">==== Low Pass Filter  H(z) = ((1 - z^(-6))^2)/(1 - z^(-1))^2 ==== %%</a></li><li><a href="#14">======================= start figure ============================= %%</a></li><li><a href="#15">==== High Pass filter H(z) = (-1+32z^(-16)+z^(-32))/(1+z^(-1)) ==== %%</a></li><li><a href="#17">bandpass filter for Noise cancelation of other sampling frequencies(Filtering)</a></li><li><a href="#19">==================== derivative filter ========================== %%</a></li><li><a href="#20">========== Squaring nonlinearly enhance the dominant peaks ========== %%</a></li><li><a href="#21">============  Moving average ================== %%</a></li><li><a href="#22">===================== Fiducial Marks ============================== %%</a></li><li><a href="#23">=================== Initialize Some Other Parameters =============== %%</a></li><li><a href="#24">initialize the training phase (2 seconds of the signal) to determine the THR_SIG and THR_NOISE</a></li><li><a href="#25">Initialize bandpath filter threshold(2 seconds of the bandpass signal)</a></li><li><a href="#26">============ Thresholding and desicion rule ============= %%</a></li><li><a href="#27">===== locate the corresponding peak in the filtered signal === %%</a></li><li><a href="#28">================= update the heart_rate ==================== %%</a></li><li><a href="#29">== calculate the mean last 8 R waves to ensure that QRS is not ==== %%</a></li><li><a href="#30">===================  find noise and QRS peaks ================== %%</a></li><li><a href="#31">================== adjust the threshold with SNR ============= %%</a></li><li><a href="#33">======================= Adjust Lengths ============================ %%</a></li><li><a href="#34">======================= Plottings ================================= %%</a></li><li><a href="#35">================== overlay on the signals ========================= %%</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [qrs_amp_raw,qrs_i_raw,delay]=pan_tompkin(ecg,fs,gr)
+</pre><h2 id="2">function [qrs_amp_raw,qrs_i_raw,delay]=pan_tompkin(ecg,fs)</h2><p>Complete implementation of Pan-Tompkins algorithm</p><h2 id="3">Inputs</h2><p>ecg : raw ecg vector signal 1d signal fs : sampling frequency e.g. 200Hz, 400Hz and etc gr : flag to plot or not plot (set it 1 to have a plot or set it zero not to see any plots</p><h2 id="4">Outputs</h2><p>qrs_amp_raw : amplitude of R waves amplitudes qrs_i_raw : index of R waves delay : number of samples which the signal is delayed due to the filtering</p><h2 id="5">Method</h2><p>See Ref and supporting documents on researchgate. https://www.researchgate.net/publication/313673153_Matlab_Implementation_of_Pan_Tompkins_ECG_QRS_detector</p><h2 id="6">References :</h2><pre class="codeinput"><span class="comment">%[1] Sedghamiz. H, "Matlab Implementation of Pan Tompkins ECG QRS</span>
+<span class="comment">%detector.",2014. (See researchgate)</span>
+<span class="comment">%[2] PAN.J, TOMPKINS. W.J,"A Real-Time QRS Detection Algorithm" IEEE</span>
+<span class="comment">%TRANSACTIONS ON BIOMEDICAL ENGINEERING, VOL. BME-32, NO. 3, MARCH 1985.</span>
+</pre><h2 id="7">============== Licensce ========================================== %%</h2><p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. Author : Hooman Sedghamiz, Feb, 2018 MSc. Biomedical Engineering, Linkoping University Email : <a href="mailto:Hooman.sedghamiz@gmail.com">Hooman.sedghamiz@gmail.com</a></p><h2 id="8">============ Update History ================== %%</h2><p>Feb 2018 :           1- Cleaned up the code and added more comments           2- Added to BioSigKit Toolbox</p><h2 id="9">================= Now Part of BioSigKit ==================== %%</h2><pre class="codeinput"><span class="keyword">if</span> ~isvector(ecg)
+  error(<span class="string">'ecg must be a row or column vector'</span>);
+<span class="keyword">end</span>
+<span class="keyword">if</span> nargin &lt; 3
+    gr = 1;   <span class="comment">% on default the function always plots</span>
+<span class="keyword">end</span>
+ecg = ecg(:); <span class="comment">% vectorize</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in pan_tompkin (line 46)
+if ~isvector(ecg)
+</pre><h2 id="10">======================= Initialize =============================== %</h2><pre class="codeinput">delay = 0;
+skip = 0;                                                                  <span class="comment">% becomes one when a T wave is detected</span>
+m_selected_RR = 0;
+mean_RR = 0;
+ser_back = 0;
+ax = zeros(1,6);
+</pre><h2 id="11">============ Noise cancelation(Filtering)( 5-15 Hz) =============== %%</h2><pre class="codeinput"><span class="keyword">if</span> fs == 200
+</pre><pre class="codeinput"><span class="comment">% ------------------ remove the mean of Signal -----------------------%</span>
+  ecg = ecg - mean(ecg);
+</pre><h2 id="13">==== Low Pass Filter  H(z) = ((1 - z^(-6))^2)/(1 - z^(-1))^2 ==== %%</h2><pre class="codeinput"><span class="comment">%%It has come to my attention the original filter doesnt achieve 12 Hz</span>
+<span class="comment">%    b = [1 0 0 0 0 0 -2 0 0 0 0 0 1];</span>
+<span class="comment">%    a = [1 -2 1];</span>
+<span class="comment">%    ecg_l = filter(b,a,ecg);</span>
+<span class="comment">%    delay = 6;</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+   Wn = 12*2/fs;
+   N = 3;                                                                  <span class="comment">% order of 3 less processing</span>
+   [a,b] = butter(N,Wn,<span class="string">'low'</span>);                                             <span class="comment">% bandpass filtering</span>
+   ecg_l = filtfilt(a,b,ecg);
+   ecg_l = ecg_l/ max(abs(ecg_l));
+</pre><h2 id="14">======================= start figure ============================= %%</h2><pre class="codeinput">   <span class="keyword">if</span> gr
+    figure;
+    ax(1) = subplot(321);plot(ecg);axis <span class="string">tight</span>;title(<span class="string">'Raw signal'</span>);
+    ax(2)=subplot(322);plot(ecg_l);axis <span class="string">tight</span>;title(<span class="string">'Low pass filtered'</span>);
+   <span class="keyword">end</span>
+</pre><h2 id="15">==== High Pass filter H(z) = (-1+32z^(-16)+z^(-32))/(1+z^(-1)) ==== %%</h2><pre class="codeinput"><span class="comment">%%It has come to my attention the original filter doesn achieve 5 Hz</span>
+<span class="comment">%    b = zeros(1,33);</span>
+<span class="comment">%    b(1) = -1; b(17) = 32; b(33) = 1;</span>
+<span class="comment">%    a = [1 1];</span>
+<span class="comment">%    ecg_h = filter(b,a,ecg_l);    % Without Delay</span>
+<span class="comment">%    delay = delay + 16;</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+   Wn = 5*2/fs;
+   N = 3;                                                                  <span class="comment">% order of 3 less processing</span>
+   [a,b] = butter(N,Wn,<span class="string">'high'</span>);                                            <span class="comment">% bandpass filtering</span>
+   ecg_h = filtfilt(a,b,ecg_l);
+   ecg_h = ecg_h/ max(abs(ecg_h));
+   <span class="keyword">if</span> gr
+    ax(3)=subplot(323);plot(ecg_h);axis <span class="string">tight</span>;title(<span class="string">'High Pass Filtered'</span>);
+   <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">else</span>
+</pre><h2 id="17">bandpass filter for Noise cancelation of other sampling frequencies(Filtering)</h2><pre class="codeinput"> f1=5;                                                                      <span class="comment">% cuttoff low frequency to get rid of baseline wander</span>
+ f2=15;                                                                     <span class="comment">% cuttoff frequency to discard high frequency noise</span>
+ Wn=[f1 f2]*2/fs;                                                           <span class="comment">% cutt off based on fs</span>
+ N = 3;                                                                     <span class="comment">% order of 3 less processing</span>
+ [a,b] = butter(N,Wn);                                                      <span class="comment">% bandpass filtering</span>
+ ecg_h = filtfilt(a,b,ecg);
+ ecg_h = ecg_h/ max( abs(ecg_h));
+ <span class="keyword">if</span> gr
+  ax(1) = subplot(3,2,[1 2]);plot(ecg);axis <span class="string">tight</span>;title(<span class="string">'Raw Signal'</span>);
+  ax(3)=subplot(323);plot(ecg_h);axis <span class="string">tight</span>;title(<span class="string">'Band Pass Filtered'</span>);
+ <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="19">==================== derivative filter ========================== %%</h2><p>------ H(z) = (1/8T)(-z^(-2) - 2z^(-1) + 2z + z^(2)) --------- %</p><pre class="codeinput"><span class="keyword">if</span> fs ~= 200
+ int_c = (5-1)/(fs*1/40);
+ b = interp1(1:5,[1 2 0 -2 -1].*(1/8)*fs,1:int_c:5);
+<span class="keyword">else</span>
+ b = [1 2 0 -2 -1].*(1/8)*fs;
+<span class="keyword">end</span>
+
+ ecg_d = filtfilt(b,1,ecg_h);
+ ecg_d = ecg_d/max(ecg_d);
+
+ <span class="keyword">if</span> gr
+  ax(4)=subplot(324);plot(ecg_d);
+  axis <span class="string">tight</span>;
+  title(<span class="string">'Filtered with the derivative filter'</span>);
+ <span class="keyword">end</span>
+</pre><h2 id="20">========== Squaring nonlinearly enhance the dominant peaks ========== %%</h2><pre class="codeinput"> ecg_s = ecg_d.^2;
+ <span class="keyword">if</span> gr
+  ax(5)=subplot(325);
+  plot(ecg_s);
+  axis <span class="string">tight</span>;
+  title(<span class="string">'Squared'</span>);
+ <span class="keyword">end</span>
+</pre><h2 id="21">============  Moving average ================== %%</h2><pre class="codeinput"><span class="comment">%-------Y(nt) = (1/N)[x(nT-(N - 1)T)+ x(nT - (N - 2)T)+...+x(nT)]---------%</span>
+ecg_m = conv(ecg_s ,ones(1 ,round(0.150*fs))/round(0.150*fs));
+delay = delay + round(0.150*fs)/2;
+
+ <span class="keyword">if</span> gr
+  ax(6)=subplot(326);plot(ecg_m);
+  axis <span class="string">tight</span>;
+  title(<span class="string">'Averaged with 30 samples length,Black noise,Green Adaptive Threshold,RED Sig Level,Red circles QRS adaptive threshold'</span>);
+  axis <span class="string">tight</span>;
+ <span class="keyword">end</span>
+</pre><h2 id="22">===================== Fiducial Marks ============================== %%</h2><p>Note : a minimum distance of 40 samples is considered between each R wave since in physiological point of view no RR wave can occur in less than 200 msec distance</p><pre class="codeinput">[pks,locs] = findpeaks(ecg_m,<span class="string">'MINPEAKDISTANCE'</span>,round(0.2*fs));
+</pre><h2 id="23">=================== Initialize Some Other Parameters =============== %%</h2><pre class="codeinput">LLp = length(pks);
+<span class="comment">% ---------------- Stores QRS wrt Sig and Filtered Sig ------------------%</span>
+qrs_c = zeros(1,LLp);           <span class="comment">% amplitude of R</span>
+qrs_i = zeros(1,LLp);           <span class="comment">% index</span>
+qrs_i_raw = zeros(1,LLp);       <span class="comment">% amplitude of R</span>
+qrs_amp_raw= zeros(1,LLp);      <span class="comment">% Index</span>
+<span class="comment">% ------------------- Noise Buffers ---------------------------------%</span>
+nois_c = zeros(1,LLp);
+nois_i = zeros(1,LLp);
+<span class="comment">% ------------------- Buffers for Signal and Noise ----------------- %</span>
+SIGL_buf = zeros(1,LLp);
+NOISL_buf = zeros(1,LLp);
+SIGL_buf1 = zeros(1,LLp);
+NOISL_buf1 = zeros(1,LLp);
+THRS_buf1 = zeros(1,LLp);
+THRS_buf = zeros(1,LLp);
+</pre><h2 id="24">initialize the training phase (2 seconds of the signal) to determine the THR_SIG and THR_NOISE</h2><pre class="codeinput">THR_SIG = max(ecg_m(1:2*fs))*1/3;                                          <span class="comment">% 0.25 of the max amplitude</span>
+THR_NOISE = mean(ecg_m(1:2*fs))*1/2;                                       <span class="comment">% 0.5 of the mean signal is considered to be noise</span>
+SIG_LEV= THR_SIG;
+NOISE_LEV = THR_NOISE;
+</pre><h2 id="25">Initialize bandpath filter threshold(2 seconds of the bandpass signal)</h2><pre class="codeinput">THR_SIG1 = max(ecg_h(1:2*fs))*1/3;                                          <span class="comment">% 0.25 of the max amplitude</span>
+THR_NOISE1 = mean(ecg_h(1:2*fs))*1/2;
+SIG_LEV1 = THR_SIG1;                                                        <span class="comment">% Signal level in Bandpassed filter</span>
+NOISE_LEV1 = THR_NOISE1;                                                    <span class="comment">% Noise level in Bandpassed filter</span>
+</pre><h2 id="26">============ Thresholding and desicion rule ============= %%</h2><pre class="codeinput">Beat_C = 0;                                                                 <span class="comment">% Raw Beats</span>
+Beat_C1 = 0;                                                                <span class="comment">% Filtered Beats</span>
+Noise_Count = 0;                                                            <span class="comment">% Noise Counter</span>
+<span class="keyword">for</span> i = 1 : LLp
+</pre><h2 id="27">===== locate the corresponding peak in the filtered signal === %%</h2><pre class="codeinput">    <span class="keyword">if</span> locs(i)-round(0.150*fs)&gt;= 1 &amp;&amp; locs(i)&lt;= length(ecg_h)
+          [y_i,x_i] = max(ecg_h(locs(i)-round(0.150*fs):locs(i)));
+       <span class="keyword">else</span>
+          <span class="keyword">if</span> i == 1
+            [y_i,x_i] = max(ecg_h(1:locs(i)));
+            ser_back = 1;
+          <span class="keyword">elseif</span> locs(i)&gt;= length(ecg_h)
+            [y_i,x_i] = max(ecg_h(locs(i)-round(0.150*fs):end));
+          <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="28">================= update the heart_rate ==================== %%</h2><pre class="codeinput">    <span class="keyword">if</span> Beat_C &gt;= 9
+        diffRR = diff(qrs_i(Beat_C-8:Beat_C));                                   <span class="comment">% calculate RR interval</span>
+        mean_RR = mean(diffRR);                                            <span class="comment">% calculate the mean of 8 previous R waves interval</span>
+        comp =qrs_i(Beat_C)-qrs_i(Beat_C-1);                                     <span class="comment">% latest RR</span>
+
+        <span class="keyword">if</span> comp &lt;= 0.92*mean_RR || comp &gt;= 1.16*mean_RR
+     <span class="comment">% ------ lower down thresholds to detect better in MVI -------- %</span>
+                THR_SIG = 0.5*(THR_SIG);
+                THR_SIG1 = 0.5*(THR_SIG1);
+        <span class="keyword">else</span>
+            m_selected_RR = mean_RR;                                       <span class="comment">% The latest regular beats mean</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+</pre><h2 id="29">== calculate the mean last 8 R waves to ensure that QRS is not ==== %%</h2><pre class="codeinput">       <span class="keyword">if</span> m_selected_RR
+           test_m = m_selected_RR;                                         <span class="comment">%if the regular RR availabe use it</span>
+       <span class="keyword">elseif</span> mean_RR &amp;&amp; m_selected_RR == 0
+           test_m = mean_RR;
+       <span class="keyword">else</span>
+           test_m = 0;
+       <span class="keyword">end</span>
+
+    <span class="keyword">if</span> test_m
+          <span class="keyword">if</span> (locs(i) - qrs_i(Beat_C)) &gt;= round(1.66*test_m)                  <span class="comment">% it shows a QRS is missed</span>
+              [pks_temp,locs_temp] = max(ecg_m(qrs_i(Beat_C)+ round(0.200*fs):locs(i)-round(0.200*fs))); <span class="comment">% search back and locate the max in this interval</span>
+              locs_temp = qrs_i(Beat_C)+ round(0.200*fs) + locs_temp -1;      <span class="comment">% location</span>
+
+              <span class="keyword">if</span> pks_temp &gt; THR_NOISE
+               Beat_C = Beat_C + 1;
+               qrs_c(Beat_C) = pks_temp;
+               qrs_i(Beat_C) = locs_temp;
+              <span class="comment">% ------------- Locate in Filtered Sig ------------- %</span>
+               <span class="keyword">if</span> locs_temp &lt;= length(ecg_h)
+                  [y_i_t,x_i_t] = max(ecg_h(locs_temp-round(0.150*fs):locs_temp));
+               <span class="keyword">else</span>
+                  [y_i_t,x_i_t] = max(ecg_h(locs_temp-round(0.150*fs):end));
+               <span class="keyword">end</span>
+              <span class="comment">% ----------- Band pass Sig Threshold ------------------%</span>
+               <span class="keyword">if</span> y_i_t &gt; THR_NOISE1
+                  Beat_C1 = Beat_C1 + 1;
+                  qrs_i_raw(Beat_C1) = locs_temp-round(0.150*fs)+ (x_i_t - 1);<span class="comment">% save index of bandpass</span>
+                  qrs_amp_raw(Beat_C1) = y_i_t;                               <span class="comment">% save amplitude of bandpass</span>
+                  SIG_LEV1 = 0.25*y_i_t + 0.75*SIG_LEV1;                      <span class="comment">% when found with the second thres</span>
+               <span class="keyword">end</span>
+
+               not_nois = 1;
+               SIG_LEV = 0.25*pks_temp + 0.75*SIG_LEV ;                       <span class="comment">% when found with the second threshold</span>
+             <span class="keyword">end</span>
+          <span class="keyword">else</span>
+              not_nois = 0;
+          <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="30">===================  find noise and QRS peaks ================== %%</h2><pre class="codeinput">    <span class="keyword">if</span> pks(i) &gt;= THR_SIG
+      <span class="comment">% ------ if No QRS in 360ms of the previous QRS See if T wave ------%</span>
+       <span class="keyword">if</span> Beat_C &gt;= 3
+          <span class="keyword">if</span> (locs(i)-qrs_i(Beat_C)) &lt;= round(0.3600*fs)
+              Slope1 = mean(diff(ecg_m(locs(i)-round(0.075*fs):locs(i))));       <span class="comment">% mean slope of the waveform at that position</span>
+              Slope2 = mean(diff(ecg_m(qrs_i(Beat_C)-round(0.075*fs):qrs_i(Beat_C)))); <span class="comment">% mean slope of previous R wave</span>
+              <span class="keyword">if</span> abs(Slope1) &lt;= abs(0.5*(Slope2))                              <span class="comment">% slope less then 0.5 of previous R</span>
+                 Noise_Count = Noise_Count + 1;
+                 nois_c(Noise_Count) = pks(i);
+                 nois_i(Noise_Count) = locs(i);
+                 skip = 1;                                                 <span class="comment">% T wave identification</span>
+                 <span class="comment">% ----- adjust noise levels ------ %</span>
+                 NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;
+                 NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV;
+              <span class="keyword">else</span>
+                 skip = 0;
+              <span class="keyword">end</span>
+
+           <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        <span class="comment">%---------- skip is 1 when a T wave is detected -------------- %</span>
+        <span class="keyword">if</span> skip == 0
+          Beat_C = Beat_C + 1;
+          qrs_c(Beat_C) = pks(i);
+          qrs_i(Beat_C) = locs(i);
+
+        <span class="comment">%--------------- bandpass filter check threshold --------------- %</span>
+          <span class="keyword">if</span> y_i &gt;= THR_SIG1
+              Beat_C1 = Beat_C1 + 1;
+              <span class="keyword">if</span> ser_back
+                 qrs_i_raw(Beat_C1) = x_i;                                 <span class="comment">% save index of bandpass</span>
+              <span class="keyword">else</span>
+                 qrs_i_raw(Beat_C1)= locs(i)-round(0.150*fs)+ (x_i - 1);   <span class="comment">% save index of bandpass</span>
+              <span class="keyword">end</span>
+              qrs_amp_raw(Beat_C1) =  y_i;                                 <span class="comment">% save amplitude of bandpass</span>
+              SIG_LEV1 = 0.125*y_i + 0.875*SIG_LEV1;                       <span class="comment">% adjust threshold for bandpass filtered sig</span>
+          <span class="keyword">end</span>
+         SIG_LEV = 0.125*pks(i) + 0.875*SIG_LEV ;                          <span class="comment">% adjust Signal level</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">elseif</span> (THR_NOISE &lt;= pks(i)) &amp;&amp; (pks(i) &lt; THR_SIG)
+         NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;                        <span class="comment">% adjust Noise level in filtered sig</span>
+         NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV;                       <span class="comment">% adjust Noise level in MVI</span>
+    <span class="keyword">elseif</span> pks(i) &lt; THR_NOISE
+        Noise_Count = Noise_Count + 1;
+        nois_c(Noise_Count) = pks(i);
+        nois_i(Noise_Count) = locs(i);
+        NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;                         <span class="comment">% noise level in filtered signal</span>
+        NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV;                        <span class="comment">% adjust Noise level in MVI</span>
+    <span class="keyword">end</span>
+</pre><h2 id="31">================== adjust the threshold with SNR ============= %%</h2><pre class="codeinput">    <span class="keyword">if</span> NOISE_LEV ~= 0 || SIG_LEV ~= 0
+        THR_SIG = NOISE_LEV + 0.25*(abs(SIG_LEV - NOISE_LEV));
+        THR_NOISE = 0.5*(THR_SIG);
+    <span class="keyword">end</span>
+
+    <span class="comment">%------ adjust the threshold with SNR for bandpassed signal -------- %</span>
+    <span class="keyword">if</span> NOISE_LEV1 ~= 0 || SIG_LEV1 ~= 0
+        THR_SIG1 = NOISE_LEV1 + 0.25*(abs(SIG_LEV1 - NOISE_LEV1));
+        THR_NOISE1 = 0.5*(THR_SIG1);
+    <span class="keyword">end</span>
+
+
+<span class="comment">%--------- take a track of thresholds of smoothed signal -------------%</span>
+SIGL_buf(i) = SIG_LEV;
+NOISL_buf(i) = NOISE_LEV;
+THRS_buf(i) = THR_SIG;
+
+<span class="comment">%-------- take a track of thresholds of filtered signal ----------- %</span>
+SIGL_buf1(i) = SIG_LEV1;
+NOISL_buf1(i) = NOISE_LEV1;
+THRS_buf1(i) = THR_SIG1;
+<span class="comment">% ----------------------- reset parameters -------------------------- %</span>
+skip = 0;
+not_nois = 0;
+ser_back = 0;
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="33">======================= Adjust Lengths ============================ %%</h2><pre class="codeinput">qrs_i_raw = qrs_i_raw(1:Beat_C1);
+qrs_amp_raw = qrs_amp_raw(1:Beat_C1);
+qrs_c = qrs_c(1:Beat_C);
+qrs_i = qrs_i(1:Beat_C);
+</pre><h2 id="34">======================= Plottings ================================= %%</h2><pre class="codeinput"><span class="keyword">if</span> gr
+  hold <span class="string">on</span>,scatter(qrs_i,qrs_c,<span class="string">'m'</span>);
+  hold <span class="string">on</span>,plot(locs,NOISL_buf,<span class="string">'--k'</span>,<span class="string">'LineWidth'</span>,2);
+  hold <span class="string">on</span>,plot(locs,SIGL_buf,<span class="string">'--r'</span>,<span class="string">'LineWidth'</span>,2);
+  hold <span class="string">on</span>,plot(locs,THRS_buf,<span class="string">'--g'</span>,<span class="string">'LineWidth'</span>,2);
+ <span class="keyword">if</span> any(ax)
+  ax(~ax) = [];
+  linkaxes(ax,<span class="string">'x'</span>);
+  zoom <span class="string">on</span>;
+ <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2 id="35">================== overlay on the signals ========================= %%</h2><pre class="codeinput"> <span class="keyword">if</span> gr
+   figure;
+   az(1)=subplot(311);
+   plot(ecg_h);
+   title(<span class="string">'QRS on Filtered Signal'</span>);
+   axis <span class="string">tight</span>;
+   hold <span class="string">on</span>,scatter(qrs_i_raw,qrs_amp_raw,<span class="string">'m'</span>);
+   hold <span class="string">on</span>,plot(locs,NOISL_buf1,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'--'</span>,<span class="string">'color'</span>,<span class="string">'k'</span>);
+   hold <span class="string">on</span>,plot(locs,SIGL_buf1,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'-.'</span>,<span class="string">'color'</span>,<span class="string">'r'</span>);
+   hold <span class="string">on</span>,plot(locs,THRS_buf1,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'-.'</span>,<span class="string">'color'</span>,<span class="string">'g'</span>);
+   az(2)=subplot(312);plot(ecg_m);
+   title(<span class="string">'QRS on MVI signal and Noise level(black),Signal Level (red) and Adaptive Threshold(green)'</span>);axis <span class="string">tight</span>;
+   hold <span class="string">on</span>,scatter(qrs_i,qrs_c,<span class="string">'m'</span>);
+   hold <span class="string">on</span>,plot(locs,NOISL_buf,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'--'</span>,<span class="string">'color'</span>,<span class="string">'k'</span>);
+   hold <span class="string">on</span>,plot(locs,SIGL_buf,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'-.'</span>,<span class="string">'color'</span>,<span class="string">'r'</span>);
+   hold <span class="string">on</span>,plot(locs,THRS_buf,<span class="string">'LineWidth'</span>,2,<span class="string">'Linestyle'</span>,<span class="string">'-.'</span>,<span class="string">'color'</span>,<span class="string">'g'</span>);
+   az(3)=subplot(313);
+   plot(ecg-mean(ecg));
+   title(<span class="string">'Pulse train of the found QRS on ECG signal'</span>);
+   axis <span class="string">tight</span>;
+   line(repmat(qrs_i_raw,[2 1]),<span class="keyword">...</span>
+       repmat([min(ecg-mean(ecg))/2; max(ecg-mean(ecg))/2],size(qrs_i_raw)),<span class="keyword">...</span>
+       <span class="string">'LineWidth'</span>,2.5,<span class="string">'LineStyle'</span>,<span class="string">'-.'</span>,<span class="string">'Color'</span>,<span class="string">'r'</span>);
+   linkaxes(az,<span class="string">'x'</span>);
+   zoom <span class="string">on</span>;
+ <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [qrs_amp_raw,qrs_i_raw,delay]=pan_tompkin(ecg,fs,gr)
+
+%% function [qrs_amp_raw,qrs_i_raw,delay]=pan_tompkin(ecg,fs)
+% Complete implementation of Pan-Tompkins algorithm
+
+%% Inputs
+% ecg : raw ecg vector signal 1d signal
+% fs : sampling frequency e.g. 200Hz, 400Hz and etc
+% gr : flag to plot or not plot (set it 1 to have a plot or set it zero not
+% to see any plots
+%% Outputs
+% qrs_amp_raw : amplitude of R waves amplitudes
+% qrs_i_raw : index of R waves
+% delay : number of samples which the signal is delayed due to the
+% filtering
+%% Method
+% See Ref and supporting documents on researchgate.
+% https://www.researchgate.net/publication/313673153_Matlab_Implementation_of_Pan_Tompkins_ECG_QRS_detector
+%% References :
+%[1] Sedghamiz. H, "Matlab Implementation of Pan Tompkins ECG QRS
+%detector.",2014. (See researchgate)
+%[2] PAN.J, TOMPKINS. W.J,"A Real-Time QRS Detection Algorithm" IEEE
+%TRANSACTIONS ON BIOMEDICAL ENGINEERING, VOL. BME-32, NO. 3, MARCH 1985.
+
+%% ============== Licensce ========================================== %%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+% "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+% LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+% FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+% OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+% SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+% TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+% PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+% LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
+% NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+% Author :
+% Hooman Sedghamiz, Feb, 2018
+% MSc. Biomedical Engineering, Linkoping University
+% Email : Hooman.sedghamiz@gmail.com
+%% ============ Update History ================== %%
+% Feb 2018 : 
+%           1- Cleaned up the code and added more comments
+%           2- Added to BioSigKit Toolbox
+%% ================= Now Part of BioSigKit ==================== %%
+if ~isvector(ecg)
+  error('ecg must be a row or column vector');
+end
+if nargin < 3
+    gr = 1;   % on default the function always plots
+end
+ecg = ecg(:); % vectorize
+
+%% ======================= Initialize =============================== %
+delay = 0;
+skip = 0;                                                                  % becomes one when a T wave is detected
+m_selected_RR = 0;
+mean_RR = 0;
+ser_back = 0; 
+ax = zeros(1,6);
+
+%% ============ Noise cancelation(Filtering)( 5-15 Hz) =============== %%
+if fs == 200
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH remove the mean of Signal REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-%
+  ecg = ecg - mean(ecg);
+%% ==== Low Pass Filter  H(z) = ((1 - z^(-6))^2)/(1 - z^(-1))^2 ==== %%
+%%It has come to my attention the original filter doesnt achieve 12 Hz
+%    b = [1 0 0 0 0 0 -2 0 0 0 0 0 1];
+%    a = [1 -2 1];
+%    ecg_l = filter(b,a,ecg); 
+%    delay = 6;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   Wn = 12*2/fs;
+   N = 3;                                                                  % order of 3 less processing
+   [a,b] = butter(N,Wn,'low');                                             % bandpass filtering
+   ecg_l = filtfilt(a,b,ecg); 
+   ecg_l = ecg_l/ max(abs(ecg_l));
+ %% ======================= start figure ============================= %%
+   if gr
+    figure;
+    ax(1) = subplot(321);plot(ecg);axis tight;title('Raw signal');
+    ax(2)=subplot(322);plot(ecg_l);axis tight;title('Low pass filtered');
+   end
+%% ==== High Pass filter H(z) = (-1+32z^(-16)+z^(-32))/(1+z^(-1)) ==== %%
+%%It has come to my attention the original filter doesn achieve 5 Hz
+%    b = zeros(1,33);
+%    b(1) = -1; b(17) = 32; b(33) = 1;
+%    a = [1 1];
+%    ecg_h = filter(b,a,ecg_l);    % Without Delay
+%    delay = delay + 16;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   Wn = 5*2/fs;
+   N = 3;                                                                  % order of 3 less processing
+   [a,b] = butter(N,Wn,'high');                                            % bandpass filtering
+   ecg_h = filtfilt(a,b,ecg_l); 
+   ecg_h = ecg_h/ max(abs(ecg_h));
+   if gr
+    ax(3)=subplot(323);plot(ecg_h);axis tight;title('High Pass Filtered');
+   end
+else
+%%  bandpass filter for Noise cancelation of other sampling frequencies(Filtering)
+ f1=5;                                                                      % cuttoff low frequency to get rid of baseline wander
+ f2=15;                                                                     % cuttoff frequency to discard high frequency noise
+ Wn=[f1 f2]*2/fs;                                                           % cutt off based on fs
+ N = 3;                                                                     % order of 3 less processing
+ [a,b] = butter(N,Wn);                                                      % bandpass filtering
+ ecg_h = filtfilt(a,b,ecg);
+ ecg_h = ecg_h/ max( abs(ecg_h));
+ if gr
+  ax(1) = subplot(3,2,[1 2]);plot(ecg);axis tight;title('Raw Signal');
+  ax(3)=subplot(323);plot(ecg_h);axis tight;title('Band Pass Filtered');
+ end
+end
+%% ==================== derivative filter ========================== %%
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH H(z) = (1/8T)(-z^(-2) - 2z^(-1) + 2z + z^(2)) REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- %
+if fs ~= 200
+ int_c = (5-1)/(fs*1/40);
+ b = interp1(1:5,[1 2 0 -2 -1].*(1/8)*fs,1:int_c:5);
+else
+ b = [1 2 0 -2 -1].*(1/8)*fs;   
+end
+
+ ecg_d = filtfilt(b,1,ecg_h);
+ ecg_d = ecg_d/max(ecg_d);
+
+ if gr
+  ax(4)=subplot(324);plot(ecg_d);
+  axis tight;
+  title('Filtered with the derivative filter');
+ end
+%% ========== Squaring nonlinearly enhance the dominant peaks ========== %%
+ ecg_s = ecg_d.^2;
+ if gr
+  ax(5)=subplot(325);
+  plot(ecg_s);
+  axis tight;
+  title('Squared');
+ end
+
+%% ============  Moving average ================== %%
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-Y(nt) = (1/N)[x(nT-(N - 1)T)+ x(nT - (N - 2)T)+...+x(nT)]REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-%
+ecg_m = conv(ecg_s ,ones(1 ,round(0.150*fs))/round(0.150*fs));
+delay = delay + round(0.150*fs)/2;
+
+ if gr
+  ax(6)=subplot(326);plot(ecg_m);
+  axis tight;
+  title('Averaged with 30 samples length,Black noise,Green Adaptive Threshold,RED Sig Level,Red circles QRS adaptive threshold');
+  axis tight;
+ end
+
+%% ===================== Fiducial Marks ============================== %% 
+% Note : a minimum distance of 40 samples is considered between each R wave
+% since in physiological point of view no RR wave can occur in less than
+% 200 msec distance
+[pks,locs] = findpeaks(ecg_m,'MINPEAKDISTANCE',round(0.2*fs));
+%% =================== Initialize Some Other Parameters =============== %%
+LLp = length(pks);
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH Stores QRS wrt Sig and Filtered Sig REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+qrs_c = zeros(1,LLp);           % amplitude of R
+qrs_i = zeros(1,LLp);           % index
+qrs_i_raw = zeros(1,LLp);       % amplitude of R
+qrs_amp_raw= zeros(1,LLp);      % Index
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- Noise Buffers REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-%
+nois_c = zeros(1,LLp);
+nois_i = zeros(1,LLp);
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- Buffers for Signal and Noise REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- %
+SIGL_buf = zeros(1,LLp);
+NOISL_buf = zeros(1,LLp);
+SIGL_buf1 = zeros(1,LLp);
+NOISL_buf1 = zeros(1,LLp);
+THRS_buf1 = zeros(1,LLp);
+THRS_buf = zeros(1,LLp);
+
+
+%% initialize the training phase (2 seconds of the signal) to determine the THR_SIG and THR_NOISE
+THR_SIG = max(ecg_m(1:2*fs))*1/3;                                          % 0.25 of the max amplitude 
+THR_NOISE = mean(ecg_m(1:2*fs))*1/2;                                       % 0.5 of the mean signal is considered to be noise
+SIG_LEV= THR_SIG;
+NOISE_LEV = THR_NOISE;
+
+
+%% Initialize bandpath filter threshold(2 seconds of the bandpass signal)
+THR_SIG1 = max(ecg_h(1:2*fs))*1/3;                                          % 0.25 of the max amplitude 
+THR_NOISE1 = mean(ecg_h(1:2*fs))*1/2; 
+SIG_LEV1 = THR_SIG1;                                                        % Signal level in Bandpassed filter
+NOISE_LEV1 = THR_NOISE1;                                                    % Noise level in Bandpassed filter
+%% ============ Thresholding and desicion rule ============= %%
+Beat_C = 0;                                                                 % Raw Beats
+Beat_C1 = 0;                                                                % Filtered Beats
+Noise_Count = 0;                                                            % Noise Counter
+for i = 1 : LLp  
+   %% ===== locate the corresponding peak in the filtered signal === %%
+    if locs(i)-round(0.150*fs)>= 1 && locs(i)<= length(ecg_h)
+          [y_i,x_i] = max(ecg_h(locs(i)-round(0.150*fs):locs(i)));
+       else
+          if i == 1
+            [y_i,x_i] = max(ecg_h(1:locs(i)));
+            ser_back = 1;
+          elseif locs(i)>= length(ecg_h)
+            [y_i,x_i] = max(ecg_h(locs(i)-round(0.150*fs):end));
+          end       
+    end       
+  %% ================= update the heart_rate ==================== %% 
+    if Beat_C >= 9        
+        diffRR = diff(qrs_i(Beat_C-8:Beat_C));                                   % calculate RR interval
+        mean_RR = mean(diffRR);                                            % calculate the mean of 8 previous R waves interval
+        comp =qrs_i(Beat_C)-qrs_i(Beat_C-1);                                     % latest RR
+    
+        if comp <= 0.92*mean_RR || comp >= 1.16*mean_RR
+     % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH lower down thresholds to detect better in MVI REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH %
+                THR_SIG = 0.5*(THR_SIG);
+                THR_SIG1 = 0.5*(THR_SIG1);               
+        else
+            m_selected_RR = mean_RR;                                       % The latest regular beats mean
+        end 
+          
+    end
+    
+ %% == calculate the mean last 8 R waves to ensure that QRS is not ==== %%
+       if m_selected_RR
+           test_m = m_selected_RR;                                         %if the regular RR availabe use it   
+       elseif mean_RR && m_selected_RR == 0
+           test_m = mean_RR;   
+       else
+           test_m = 0;
+       end
+        
+    if test_m
+          if (locs(i) - qrs_i(Beat_C)) >= round(1.66*test_m)                  % it shows a QRS is missed 
+              [pks_temp,locs_temp] = max(ecg_m(qrs_i(Beat_C)+ round(0.200*fs):locs(i)-round(0.200*fs))); % search back and locate the max in this interval
+              locs_temp = qrs_i(Beat_C)+ round(0.200*fs) + locs_temp -1;      % location 
+             
+              if pks_temp > THR_NOISE
+               Beat_C = Beat_C + 1;
+               qrs_c(Beat_C) = pks_temp;
+               qrs_i(Beat_C) = locs_temp;      
+              % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- Locate in Filtered Sig REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- %
+               if locs_temp <= length(ecg_h)
+                  [y_i_t,x_i_t] = max(ecg_h(locs_temp-round(0.150*fs):locs_temp));
+               else
+                  [y_i_t,x_i_t] = max(ecg_h(locs_temp-round(0.150*fs):end));
+               end
+              % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- Band pass Sig Threshold REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+               if y_i_t > THR_NOISE1 
+                  Beat_C1 = Beat_C1 + 1;
+                  qrs_i_raw(Beat_C1) = locs_temp-round(0.150*fs)+ (x_i_t - 1);% save index of bandpass 
+                  qrs_amp_raw(Beat_C1) = y_i_t;                               % save amplitude of bandpass 
+                  SIG_LEV1 = 0.25*y_i_t + 0.75*SIG_LEV1;                      % when found with the second thres 
+               end
+               
+               not_nois = 1;
+               SIG_LEV = 0.25*pks_temp + 0.75*SIG_LEV ;                       % when found with the second threshold             
+             end             
+          else
+              not_nois = 0;         
+          end
+    end
+  
+    %% ===================  find noise and QRS peaks ================== %%
+    if pks(i) >= THR_SIG      
+      % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH if No QRS in 360ms of the previous QRS See if T wave REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH%
+       if Beat_C >= 3
+          if (locs(i)-qrs_i(Beat_C)) <= round(0.3600*fs)
+              Slope1 = mean(diff(ecg_m(locs(i)-round(0.075*fs):locs(i))));       % mean slope of the waveform at that position
+              Slope2 = mean(diff(ecg_m(qrs_i(Beat_C)-round(0.075*fs):qrs_i(Beat_C)))); % mean slope of previous R wave
+              if abs(Slope1) <= abs(0.5*(Slope2))                              % slope less then 0.5 of previous R
+                 Noise_Count = Noise_Count + 1;
+                 nois_c(Noise_Count) = pks(i);
+                 nois_i(Noise_Count) = locs(i);
+                 skip = 1;                                                 % T wave identification
+                 % REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- adjust noise levels REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH %
+                 NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;
+                 NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV; 
+              else
+                 skip = 0;
+              end
+            
+           end
+        end
+        %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH skip is 1 when a T wave is detected REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH %
+        if skip == 0    
+          Beat_C = Beat_C + 1;
+          qrs_c(Beat_C) = pks(i);
+          qrs_i(Beat_C) = locs(i);
+        
+        %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- bandpass filter check threshold REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- %
+          if y_i >= THR_SIG1  
+              Beat_C1 = Beat_C1 + 1;
+              if ser_back 
+                 qrs_i_raw(Beat_C1) = x_i;                                 % save index of bandpass 
+              else
+                 qrs_i_raw(Beat_C1)= locs(i)-round(0.150*fs)+ (x_i - 1);   % save index of bandpass 
+              end
+              qrs_amp_raw(Beat_C1) =  y_i;                                 % save amplitude of bandpass 
+              SIG_LEV1 = 0.125*y_i + 0.875*SIG_LEV1;                       % adjust threshold for bandpass filtered sig
+          end
+         SIG_LEV = 0.125*pks(i) + 0.875*SIG_LEV ;                          % adjust Signal level
+        end
+              
+    elseif (THR_NOISE <= pks(i)) && (pks(i) < THR_SIG)
+         NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;                        % adjust Noise level in filtered sig
+         NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV;                       % adjust Noise level in MVI       
+    elseif pks(i) < THR_NOISE
+        Noise_Count = Noise_Count + 1;
+        nois_c(Noise_Count) = pks(i);
+        nois_i(Noise_Count) = locs(i);    
+        NOISE_LEV1 = 0.125*y_i + 0.875*NOISE_LEV1;                         % noise level in filtered signal    
+        NOISE_LEV = 0.125*pks(i) + 0.875*NOISE_LEV;                        % adjust Noise level in MVI     
+    end
+               
+    %% ================== adjust the threshold with SNR ============= %%
+    if NOISE_LEV ~= 0 || SIG_LEV ~= 0
+        THR_SIG = NOISE_LEV + 0.25*(abs(SIG_LEV - NOISE_LEV));
+        THR_NOISE = 0.5*(THR_SIG);
+    end
+    
+    %REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH adjust the threshold with SNR for bandpassed signal REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH %
+    if NOISE_LEV1 ~= 0 || SIG_LEV1 ~= 0
+        THR_SIG1 = NOISE_LEV1 + 0.25*(abs(SIG_LEV1 - NOISE_LEV1));
+        THR_NOISE1 = 0.5*(THR_SIG1);
+    end
+    
+    
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- take a track of thresholds of smoothed signal REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-%
+SIGL_buf(i) = SIG_LEV;
+NOISL_buf(i) = NOISE_LEV;
+THRS_buf(i) = THR_SIG;
+
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH take a track of thresholds of filtered signal REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- %
+SIGL_buf1(i) = SIG_LEV1;
+NOISL_buf1(i) = NOISE_LEV1;
+THRS_buf1(i) = THR_SIG1;
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH- reset parameters REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH % 
+skip = 0;                                                   
+not_nois = 0; 
+ser_back = 0;    
+end
+%% ======================= Adjust Lengths ============================ %%
+qrs_i_raw = qrs_i_raw(1:Beat_C1);
+qrs_amp_raw = qrs_amp_raw(1:Beat_C1);
+qrs_c = qrs_c(1:Beat_C);
+qrs_i = qrs_i(1:Beat_C);
+%% ======================= Plottings ================================= %%
+if gr
+  hold on,scatter(qrs_i,qrs_c,'m');
+  hold on,plot(locs,NOISL_buf,'REPLACE_WITH_DASH_DASHk','LineWidth',2);
+  hold on,plot(locs,SIGL_buf,'REPLACE_WITH_DASH_DASHr','LineWidth',2);
+  hold on,plot(locs,THRS_buf,'REPLACE_WITH_DASH_DASHg','LineWidth',2);
+ if any(ax)
+  ax(~ax) = []; 
+  linkaxes(ax,'x');
+  zoom on;
+ end
+end
+
+%% ================== overlay on the signals ========================= %%
+ if gr
+   figure;
+   az(1)=subplot(311);
+   plot(ecg_h);
+   title('QRS on Filtered Signal');
+   axis tight;
+   hold on,scatter(qrs_i_raw,qrs_amp_raw,'m');
+   hold on,plot(locs,NOISL_buf1,'LineWidth',2,'Linestyle','REPLACE_WITH_DASH_DASH','color','k');
+   hold on,plot(locs,SIGL_buf1,'LineWidth',2,'Linestyle','-.','color','r');
+   hold on,plot(locs,THRS_buf1,'LineWidth',2,'Linestyle','-.','color','g');
+   az(2)=subplot(312);plot(ecg_m);
+   title('QRS on MVI signal and Noise level(black),Signal Level (red) and Adaptive Threshold(green)');axis tight;
+   hold on,scatter(qrs_i,qrs_c,'m');
+   hold on,plot(locs,NOISL_buf,'LineWidth',2,'Linestyle','REPLACE_WITH_DASH_DASH','color','k');
+   hold on,plot(locs,SIGL_buf,'LineWidth',2,'Linestyle','-.','color','r');
+   hold on,plot(locs,THRS_buf,'LineWidth',2,'Linestyle','-.','color','g');
+   az(3)=subplot(313);
+   plot(ecg-mean(ecg));
+   title('Pulse train of the found QRS on ECG signal');
+   axis tight;
+   line(repmat(qrs_i_raw,[2 1]),...
+       repmat([min(ecg-mean(ecg))/2; max(ecg-mean(ecg))/2],size(qrs_i_raw)),...
+       'LineWidth',2.5,'LineStyle','-.','Color','r');
+   linkaxes(az,'x');
+   zoom on;
+ end
+end
+ 
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
