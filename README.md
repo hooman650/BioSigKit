@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/128659224.svg)](https://zenodo.org/badge/latestdoi/128659224)
+
 # BioSigKit
 BioSigKit is a set of useful signal processing tools in Matlab that are either developed by me personally or others in different fields of biosignal processing. BioSigKit is a wrapper with a simple visual interface that gathers this tools under a simple easy to use platform. BioSigKit's goal is to create an open source platform and umbrella for the implementation and analysis of useful signal processing algorithms. All of it's subroutines are implemented in pure MatLab script for the educational purposes even the most popular algorithms such as (Pan-Tompkins).  
 
