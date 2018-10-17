@@ -5,7 +5,7 @@ description: >
   BioSigKit
 lang: en-US
 
-baseurl: "/BioSigKit" # the subpath of your site, e.g. /blog/
+baseurl: "/docs" # the subpath of your site, e.g. /blog/
 url: https://hooman650.github.io/BioSigKit # the base hostname & protocol for your site
 git_address: https://github.com/hooman650/BioSigKit
 git_edit_address: https://github.com/hooman650/BioSigKit
