@@ -83,6 +83,9 @@ BioSigKit currently uses the following libraries and I would like to appreciate 
 # Inclusion of New Methods and Contribution
 Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days. Please read the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [Contribution guidlines](CONTRIBUTING.md) carefully before starting any contribution. If you would like to personally contribute your algorithm or work to the subroutines please use the following codemap to get an idea about the structure of BioSigKit and how you could contribute directly;
 
+# Community Guidelines
+If you are an advanced user or developer who is seeking support for the software usage please post your queries in the "issues" section as a question. Before doing so, please first read the question section of the issues as it might have been asked by another advanced user or developer. I am currently working on a wiki as well that hopefully will document these questions in a much more organized manner.
+
 ## Codemap
 ```
 |--- RunBioSigKit.m                     <-------- Main module, GUI and Commandline
