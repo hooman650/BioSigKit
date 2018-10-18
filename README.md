@@ -1,3 +1,4 @@
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.00671/status.svg)](https://doi.org/10.21105/joss.00671)
 [![DOI](https://zenodo.org/badge/128659224.svg)](https://zenodo.org/badge/latestdoi/128659224)
 
 # BioSigKit
