@@ -6,6 +6,9 @@ BioSigKit is a set of useful signal processing tools in Matlab that are either d
 
 The ultimate goal of BioSigKit is not to be only used for ECG processing, it aims to be helpful in analysis of several different physiological signals such as EMG, ACC and EDR as well. For instance the last subroutine which is a general peak detector can already be used in many different signals even with low frequencies (Please see [the paper by Scholkmann)](http://www.mdpi.com/1999-4893/5/4/588). BioSigKit offers other subroutines for ECG-derived respiration computation, real time multi-channel and single channel Foetal ECG extraction based on non-linear filtering and neural PCA. BioSigKit also offers Psuedo-correlation template matching which has proven to be more accurate for locating MUAPs in EMG signals ([EMG toolbox (offered by the same author)](https://www.mathworks.com/matlabcentral/fileexchange/59344-toolbox-for-unsupervised-classification-of-muaps-and-action-potentials-in-emg)). Futhermore, several more subroutines enable the user to estimate the posture of the subject from 3 channel ACC recordings, as well as ACC-derived respiration estimation. Please see the cheatSheet.pdf for the list of all methods provided by BioSigKit.
 
+# How to Cite
+Sedghamiz, (2018). BioSigKit: A Matlab Toolbox and Interface for Analysis of BioSignals. Journal of Open Source Software, 3(30), 671, https://doi.org/10.21105/joss.00671
+
 # QRS Detection Algorithms offered by BioSigKit
 BioSigKit provides a set of subroutines implementing the six following QRS detection algorithms:
 
