@@ -10,7 +10,7 @@ classdef HBoxFlex < uix.HBox & uix.mixin.Flex
     %  See also: uix.VBoxFlex, uix.GridFlex, uix.HBox, uix.HButtonBox
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1599 $ $Date: 2018-04-07 07:15:03 +1000 (Sat, 07 Apr 2018) $
+    %  $Revision: 1682 $ $Date: 2018-06-11 16:57:09 +0100 (Mon, 11 Jun 2018) $
     
     properties( Access = public, Dependent, AbortSet )
         DividerMarkings % divider markings [on|off]
@@ -137,7 +137,9 @@ classdef HBoxFlex < uix.HBox & uix.mixin.Flex
                 jc = loc + 1;
                 divider = obj.ColumnDividers(loc);
                 contents = obj.Contents_;
-                oldPixelWidths = [contents(ic).Position(3); contents(jc).Position(3)];
+                ip = uix.getPosition( contents(ic), 'pixels' );
+                jp = uix.getPosition( contents(jc), 'pixels' );
+                oldPixelWidths = [ip(3); jp(3)];
                 minimumWidths = obj.MinimumWidths_(iw:jw,:);
                 if delta < 0 % limit to minimum distance from left neighbor
                     delta = max( delta, minimumWidths(1) - oldPixelWidths(1) );
@@ -190,7 +192,9 @@ classdef HBoxFlex < uix.HBox & uix.mixin.Flex
                 ic = loc;
                 jc = loc + 1;
                 contents = obj.Contents_;
-                oldPixelWidths = [contents(ic).Position(3); contents(jc).Position(3)];
+                ip = uix.getPosition( contents(ic), 'pixels' );
+                jp = uix.getPosition( contents(jc), 'pixels' );
+                oldPixelWidths = [ip(3); jp(3)];
                 minimumWidths = obj.MinimumWidths_(iw:jw,:);
                 if delta < 0 % limit to minimum distance from left neighbor
                     delta = max( delta, minimumWidths(1) - oldPixelWidths(1) );

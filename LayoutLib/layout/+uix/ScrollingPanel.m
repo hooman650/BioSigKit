@@ -10,7 +10,7 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
     %  See also: uix.Panel, uix.BoxPanel, uix.TabPanel, uicontainer
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1604 $ $Date: 2018-05-01 11:45:20 +0100 (Tue, 01 May 2018) $
+    %  $Revision: 1762 $ $Date: 2018-10-19 17:12:57 +0100 (Fri, 19 Oct 2018) $
     
     properties( Dependent )
         Heights % heights of contents, in pixels and/or weights
@@ -472,9 +472,9 @@ classdef ScrollingPanel < uix.Container & uix.mixin.Panel
             
             % Add to sizes
             obj.Widths_(end+1,:) = -1;
-            obj.MinimumWidths_(end+1,:) = -1;
+            obj.MinimumWidths_(end+1,:) = 1;
             obj.Heights_(end+1,:) = -1;
-            obj.MinimumHeights_(end+1,:) = -1;
+            obj.MinimumHeights_(end+1,:) = 1;
             obj.VerticalSliders(end+1,:) = uicontrol( ...
                 'Internal', true, 'Parent', obj, 'Units', 'pixels', ...
                 'Style', 'slider' );

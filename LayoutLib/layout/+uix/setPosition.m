@@ -8,10 +8,18 @@ function setPosition( o, p, u )
 %  honors the ActivePositionProperty of axes.
 
 %  Copyright 2009-2016 The MathWorks, Inc.
-%  $Revision: 1435 $ $Date: 2016-11-17 17:50:34 +0000 (Thu, 17 Nov 2016) $
+%  $Revision: 1765 $ $Date: 2018-10-25 17:11:26 +0100 (Thu, 25 Oct 2018) $
 
-o.Units = u;
-if isa( o, 'matlab.graphics.axis.Axes' )
+% Set units
+if ~isempty( findprop( o, 'Units' ) )
+    o.Units = u;
+else
+    assert( strcmp( u, 'pixels' ), 'uix:InvalidOperation', ...
+        'Objects without property ''Units'' have units of ''pixels''.' )
+end
+
+% Set position
+if ~isempty( findprop( o, 'ActivePositionProperty' ) )
     switch o.ActivePositionProperty
         case 'position'
             o.Position = p;

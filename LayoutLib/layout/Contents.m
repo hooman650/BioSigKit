@@ -1,5 +1,5 @@
 % GUI Layout Toolbox
-% Version 2.3.2 (R2018a) 01-May-2018
+% Version 2.3.3 (R2018b) 25-October-2018
 %
 % Panels
 %   uix.Panel          - arrange a single element inside a standard panel
@@ -25,4 +25,4 @@
 %   uix.tracking       - track anonymized usage data
 
 %  Copyright 2009-2018 The MathWorks, Inc.
-%  $Revision: 1600 $ $Date: 2018-05-01 10:22:41 +0100 (Tue, 01 May 2018) $
+%  $Revision: 1766 $ $Date: 2018-10-25 17:11:56 +0100 (Thu, 25 Oct 2018) $

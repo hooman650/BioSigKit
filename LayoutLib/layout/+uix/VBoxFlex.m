@@ -10,7 +10,7 @@ classdef VBoxFlex < uix.VBox & uix.mixin.Flex
     %  See also: uix.HBoxFlex, uix.GridFlex, uix.VBox, uix.VButtonBox
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1599 $ $Date: 2018-04-07 07:15:03 +1000 (Sat, 07 Apr 2018) $
+    %  $Revision: 1682 $ $Date: 2018-06-11 16:57:09 +0100 (Mon, 11 Jun 2018) $
     
     properties( Access = public, Dependent, AbortSet )
         DividerMarkings % divider markings [on|off]
@@ -137,7 +137,9 @@ classdef VBoxFlex < uix.VBox & uix.mixin.Flex
                 jc = loc + 1;
                 divider = obj.RowDividers(loc);
                 contents = obj.Contents_;
-                oldPixelHeights = [contents(ic).Position(4); contents(jc).Position(4)];
+                ip = uix.getPosition( contents(ic), 'pixels' );
+                jp = uix.getPosition( contents(jc), 'pixels' );
+                oldPixelHeights = [ip(4); jp(4)];
                 minimumHeights = obj.MinimumHeights_(ih:jh,:);
                 if delta < 0 % limit to minimum distance from lower neighbor
                     delta = max( delta, minimumHeights(2) - oldPixelHeights(2) );
@@ -190,7 +192,9 @@ classdef VBoxFlex < uix.VBox & uix.mixin.Flex
                 ic = loc;
                 jc = loc + 1;
                 contents = obj.Contents_;
-                oldPixelHeights = [contents(ic).Position(4); contents(jc).Position(4)];
+                ip = uix.getPosition( contents(ic), 'pixels' );
+                jp = uix.getPosition( contents(jc), 'pixels' );
+                oldPixelHeights = [ip(4); jp(4)];
                 minimumHeights = obj.MinimumHeights_(ih:jh,:);
                 if delta < 0 % limit to minimum distance from lower neighbor
                     delta = max( delta, minimumHeights(2) - oldPixelHeights(2) );

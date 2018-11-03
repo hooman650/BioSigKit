@@ -8,7 +8,7 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
     %  See also: uix.Node
     
     %  Copyright 2009-2016 The MathWorks, Inc.
-    %  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $
+    %  $Revision: 1763 $ $Date: 2018-10-25 15:56:50 +0100 (Thu, 25 Oct 2018) $
     
     properties( Access = private )
         Root % root node
@@ -30,7 +30,7 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
             %  of o.
             
             % Check
-            assert( iscontent( oRoot ) && ...
+            assert( ispositionable( oRoot ) && ...
                 isequal( size( oRoot ), [1 1] ), 'uix.InvalidArgument', ...
                 'Object must be a graphics object.' )
             
@@ -76,7 +76,8 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
             % Create child node
             nChild = uix.Node( oChild );
             nParent.addChild( nChild )
-            if iscontent( oChild )
+            positionable = ispositionable( oChild );
+            if positionable == true
                 % Add Internal PreSet property listener
                 internalPreSetListener = event.proplistener( oChild, ...
                     findprop( oChild, 'Internal' ), 'PreSet', ...
@@ -105,12 +106,12 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
             end
             
             % Raise ChildAdded event
-            if iscontent( oChild ) && oChild.Internal == false
+            if positionable == true && oChild.Internal == false
                 notify( obj, 'ChildAdded', uix.ChildEvent( oChild ) )
             end
             
             % Add grandchildren
-            if ~iscontent( oChild )
+            if positionable == false && isblacklisted( oChild ) == false
                 oGrandchildren = hgGetTrueChildren( oChild );
                 for ii = 1:numel( oGrandchildren )
                     obj.addChild( nChild, oGrandchildren(ii) )
@@ -148,7 +149,7 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
                 
                 % Process this node
                 oc = nc.Object;
-                if iscontent( oc ) && oc.Internal == false
+                if ispositionable( oc ) == true && oc.Internal == false
                     notify( obj, 'ChildRemoved', uix.ChildEvent( oc ) )
                 end
                 
@@ -202,19 +203,22 @@ classdef ( Hidden, Sealed ) ChildObserver < handle
     
 end % classdef
 
-function tf = iscontent( o )
-%iscontent  True for graphics that can be Contents (and can be Children)
-%
-%  uix.ChildObserver needs to determine which objects can be Contents,
-%  which is equivalent to can be Children if HandleVisibility is 'on' and
-%  Internal is false.  Prior to R2016a, this condition could be checked
-%  using isgraphics.  From R2016a, isgraphics returns true for a wider
-%  range of objects, including some that can never by Contents, e.g.,
-%  JavaCanvas.  Therefore this function checks whether an object is of type
-%  matlab.graphics.internal.GraphicsBaseFunctions, which is what isgraphics
-%  did prior to R2016a.
+function tf = ispositionable( o )
+%ispositionable  True for positionable graphics
 
-tf = isa( o, 'matlab.graphics.internal.GraphicsBaseFunctions' ) &&...
-     isprop( o, 'Position' );
+p = findprop( o, 'Position' );
+tf = isgraphics( o ) && ~isempty( p ) && ...
+    isequal( p.GetAccess, 'public' ) && ...
+    isequal( p.SetAccess, 'public' ) && ...
+    isequal( size( o.Position ), [1 4] );
 
-end % iscontent
+end % ispositionable
+
+function tf = isblacklisted( o )
+%isblacklisted  True for objects that never have positionable graphics
+
+tf = isa( o, 'matlab.ui.container.Menu' ) || ...
+    isa( o, 'matlab.ui.container.Toolbar' ) || ...
+    isa( o, 'matlab.graphics.shape.internal.AnnotationPane' );
+
+end % isblacklisted
