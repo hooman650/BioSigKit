@@ -9,7 +9,7 @@ The ultimate goal of BioSigKit is not to be only used for ECG processing, it aim
 # How to Cite
 Sedghamiz, (2018). BioSigKit: A Matlab Toolbox and Interface for Analysis of BioSignals. Journal of Open Source Software, 3(30), 671, https://doi.org/10.21105/joss.00671
 
-## If you like the tools I develop, please get me a coffee :) 
+### If you like the tools I develop, please get me a coffee :) 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9FAVSPGXTBBQU&currency_code=USD)
 
 # QRS Detection Algorithms offered by BioSigKit
