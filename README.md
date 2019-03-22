@@ -84,10 +84,10 @@ BioSigKit comes with two sample ECG recordings for testing of the algorithms off
 
 # Acknowledgements:
 BioSigKit currently uses the following libraries and I would like to appreciate their efforts:
-### 1) [GUI Layout Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/47982-gui-layout-toolbox).
-### 2) [Rupert Ortner, 2016. Matlab implementation of Filter-Bank](https://searchcode.com/codesearch/view/13912596/).
-### 3) [Distinguishable Colors](https://www.mathworks.com/matlabcentral/fileexchange/29702-generate-maximally-perceptually-distinct-colors).
-### 4) [Alexandros Leontitsis. Phase-Space Computation]( http://www.geocities.com/CapeCanaveral/Lab/1421).
+#### 1) [GUI Layout Toolbox](https://www.mathworks.com/matlabcentral/fileexchange/47982-gui-layout-toolbox).
+#### 2) [Rupert Ortner, 2016. Matlab implementation of Filter-Bank](https://searchcode.com/codesearch/view/13912596/).
+#### 3) [Distinguishable Colors](https://www.mathworks.com/matlabcentral/fileexchange/29702-generate-maximally-perceptually-distinct-colors).
+#### 4) [Alexandros Leontitsis. Phase-Space Computation]( http://www.geocities.com/CapeCanaveral/Lab/1421).
 
 # Inclusion of New Methods and Contribution
 Have you published an algorithm that you would like it to be featured in BioSigKit or you like to suggest the inclusion of new algorithm you found helpful? Please open a request in the issue section, explain what the algorithm is, add the links to the supporting paper or the source code and I would try to add it to BioSigKit subroutines as soon as I can. Please note that I am maintaining BioSigKit in my free-time, so the updates might take a few days. Please read the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and [Contribution guidlines](CONTRIBUTING.md) carefully before starting any contribution. If you would like to personally contribute your algorithm or work to the subroutines please use the following codemap to get an idea about the structure of BioSigKit and how you could contribute directly;
